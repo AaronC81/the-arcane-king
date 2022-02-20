@@ -7,5 +7,10 @@ module GosuGameJam2
       @y = y
       @z = z
     end
+
+    def +(other)
+      raise "can't add point to #{other}" unless other.is_a?(Point)
+      Point.new(x + other.x, y + other.y, z + other.z)
+    end 
   end
 end
