@@ -12,5 +12,11 @@ module GosuGameJam2
       raise "can't add point to #{other}" unless other.is_a?(Point)
       Point.new(x + other.x, y + other.y, z + other.z)
     end 
+
+    def distance(other)
+      x_dist = (x - other.x)
+      y_dist = (y - other.y)
+      Math.sqrt(x_dist**2 + y_dist**2)
+    end
   end
 end
