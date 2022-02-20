@@ -28,7 +28,9 @@ module GosuGameJam2
     end
 
     def effect
-      targets.sample.damage(40)
+      target = targets.sample
+      target.damage(40)
+      create_trail(to: target.position, colour: Gosu::Color::WHITE, intensity: 1)
     end
   end
 end

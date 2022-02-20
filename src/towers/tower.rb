@@ -1,5 +1,6 @@
 require_relative '../engine/entity'
 require_relative '../engine/animation'
+require_relative '../effects/projectile_trail'
 
 module GosuGameJam2
   # A tower in a fixed position, which has some effect.
@@ -67,6 +68,15 @@ module GosuGameJam2
 
     def effect
       # For subclasses to override!
+    end
+
+    def create_trail(to:, colour:, intensity:)
+      $world.entities << ProjectileTrail.new(
+        from: self.position,
+        to: to,
+        colour: colour,
+        opacity: (intensity * 255).round,
+      )
     end
 
     def tick
