@@ -21,20 +21,16 @@ module GosuGameJam2
         path: [[1000, :east], [500, :south]],
         speed: 2,
         max_health: 100,
-        team: :friendly,
+        team: :enemy,
       )
 
       $world.towers << ArcherTower.new(
         position: Point.new(950, 110),
-        owner: :enemy,
+        owner: :friendly,
       )
     end
 
     def update
-      if Gosu.button_down?(Gosu::KB_F)
-        self.fullscreen = !fullscreen?
-        sleep 1 # really rubbish debounce
-      end
       $world.units.each do |u|
         u.tick
       end
@@ -49,6 +45,22 @@ module GosuGameJam2
       end
       $world.towers.each do |t|
         t.draw
+      end
+    end
+
+    def needs_cursor?
+      true
+    end  
+
+    def button_down(id)
+      super # Fullscreen with Alt+Enter/Cmd+F/F11
+
+      case id
+      when Gosu::MsLeft
+        $world.towers << ArcherTower.new(
+          position: Point.new(mouse_x.to_i, mouse_y.to_i),
+          owner: :friendly,
+        )
       end
     end
   end
