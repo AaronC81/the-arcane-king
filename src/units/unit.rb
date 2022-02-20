@@ -91,7 +91,7 @@ module GosuGameJam2
       )
 
       # Draw a health bar
-      health_bar_total_width = 40
+      health_bar_total_width = 25
       health_bar_remaining_width = ((health.to_f / max_health.to_f) * health_bar_total_width).round
       if @health_bar_flash_ticks > 0
         health_bar_colour = Gosu::Color::RED
