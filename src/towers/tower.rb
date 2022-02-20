@@ -1,4 +1,5 @@
 require_relative '../engine/entity'
+require_relative '../engine/animation'
 
 module GosuGameJam2
   # A tower in a fixed position, which has some effect.
@@ -39,6 +40,15 @@ module GosuGameJam2
       raise '.description unimplemented'
     end
 
+    def self.image
+      # Subclasses should override this, but we'll provide a default for in-development towers
+      nil
+    end
+
+    def image
+      self.class.image
+    end
+
     # Gets all units which this tower could target.
     def targets
       $world.find_units(team: absolute_target_team, radius: [position, radius])
@@ -74,24 +84,35 @@ module GosuGameJam2
     end
 
     def draw
-      # Draw tower (temporary)
-      sprite_width = 5
-      sprite_height = 5
-      Gosu.draw_rect(
-        position.x - sprite_width, position.y - sprite_height, sprite_width * 2, sprite_height * 2,
-        Gosu::Color::WHITE,
-      )
+      if self.class.image
+        super
+        sprite_width = image.width
+        sprite_height = image.height
+      else
+        # Draw tower (temporary)
+        sprite_width = 5
+        sprite_height = 5
+        Gosu.draw_rect(
+          position.x - sprite_width, position.y - sprite_height, sprite_width * 2, sprite_height * 2,
+          Gosu::Color::WHITE,
+        )
+      end
 
       # Draw a circle for the radius
       Gosu.draw_circle(position.x, position.y, radius, Gosu::Color::WHITE)
-
-      $small_font.draw_text("#{self.class.tower_name}\n#{remaining_cooldown}/#{cooldown}", position.x + 7, position.y - sprite_height, 1)
     end
 
     # Draw a "blueprint" of this tower while the player is deciding where to place it. 
     def self.draw_blueprint(pos)
+      if image
+        w = image.width
+        h = image.height
+      else
+        w = 10
+        h = 10
+      end
       transparent_red = Gosu::Color.argb(0xFF, 0xFF, 0x00, 0x00)
-      Gosu.draw_rect(pos.x - 5, pos.y - 5, 10, 10, transparent_red)
+      Gosu.draw_rect(pos.x - w / 2, pos.y - h / 2, w, h, transparent_red)
       Gosu.draw_circle(pos.x, pos.y, radius, transparent_red)
     end
   end

@@ -16,7 +16,11 @@ module GosuGameJam2
     end
 
     def self.radius
-      100
+      120
+    end
+    
+    def self.image
+      Res.image('archer_tower.png')
     end
 
     def self.description

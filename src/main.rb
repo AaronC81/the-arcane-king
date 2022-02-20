@@ -1,4 +1,5 @@
 require 'gosu'
+require_relative 'res'
 require_relative 'units/unit'
 require_relative 'towers/tower'
 require_relative 'towers/archer_tower'
