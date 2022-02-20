@@ -2,19 +2,24 @@ require 'gosu'
 require_relative 'units/unit'
 require_relative 'towers/tower'
 require_relative 'towers/archer_tower'
+require_relative 'ui/button'
 require_relative 'world'
 require_relative 'circle'
 
 Gosu::enable_undocumented_retrofication
 
 module GosuGameJam2
+  WIDTH = 1600
+  HEIGHT = 900
+
   class GameWindow < Gosu::Window
     def initialize
-      super(1600, 900)
+      super(WIDTH, HEIGHT)
       $world = World.new
 
       # TODO: Find better font and bundle into files
-      $font = Gosu::Font.new(14, name: "Arial")
+      $small_font = Gosu::Font.new(14, name: "Arial")
+      $regular_font = Gosu::Font.new(20, name: "Arial")
 
       $world.units << Unit.new(
         position: Point.new(30, 30),
@@ -28,15 +33,29 @@ module GosuGameJam2
         position: Point.new(950, 110),
         owner: :friendly,
       )
+
+      @button = Button.new(
+        position: Point.new(1500, 70),
+        width: 120,
+        height: 30,
+        text: "Hello!",
+        tooltip: "This is\nsome\ntext",
+        on_click: ->() { puts "hey" }
+      )
     end
 
     def update
+      $cursor = Point.new(mouse_x.to_i, mouse_y.to_i)
+
       $world.units.each do |u|
         u.tick
       end
       $world.towers.each do |t|
         t.tick
       end
+      @button.tick
+
+      $click = false
     end
 
     def draw
@@ -46,6 +65,7 @@ module GosuGameJam2
       $world.towers.each do |t|
         t.draw
       end
+      @button.draw
     end
 
     def needs_cursor?
@@ -57,10 +77,7 @@ module GosuGameJam2
 
       case id
       when Gosu::MsLeft
-        $world.towers << ArcherTower.new(
-          position: Point.new(mouse_x.to_i, mouse_y.to_i),
-          owner: :friendly,
-        )
+        $click = true
       end
     end
   end

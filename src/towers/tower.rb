@@ -77,7 +77,7 @@ module GosuGameJam2
       # Draw a circle for the radius
       Gosu.draw_circle(position.x, position.y, radius, Gosu::Color::WHITE)
 
-      $font.draw_text("#{name}\n#{remaining_cooldown}/#{cooldown}", position.x + 7, position.y - sprite_height, 1)
+      $small_font.draw_text("#{name}\n#{remaining_cooldown}/#{cooldown}", position.x + 7, position.y - sprite_height, 1)
     end
   end
 end
