@@ -15,7 +15,7 @@ module GosuGameJam2
     def initialize
       super(WIDTH, HEIGHT)
       $world = World.new
-
+      
       # TODO: Find better font and bundle into files
       $small_font = Gosu::Font.new(14, name: "Arial")
       $regular_font = Gosu::Font.new(20, name: "Arial")
@@ -74,6 +74,8 @@ module GosuGameJam2
       end
 
       $world.placing_tower&.draw_blueprint($cursor)
+
+      $regular_font.draw_text("#{Gosu.fps} FPS", 0, 0, 100)
     end
 
     def needs_cursor?
