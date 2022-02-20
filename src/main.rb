@@ -6,8 +6,6 @@ require_relative 'ui/button'
 require_relative 'world'
 require_relative 'circle'
 
-Gosu::enable_undocumented_retrofication
-
 module GosuGameJam2
   WIDTH = 1600
   HEIGHT = 900
@@ -29,18 +27,13 @@ module GosuGameJam2
         team: :enemy,
       )
 
-      $world.towers << ArcherTower.new(
-        position: Point.new(950, 110),
-        owner: :friendly,
-      )
-
       @button = Button.new(
         position: Point.new(1500, 70),
         width: 120,
         height: 30,
-        text: "Hello!",
-        tooltip: "This is\nsome\ntext",
-        on_click: ->() { puts "hey" }
+        text: "Archer",
+        tooltip: "Deal periodic damage to\none target in a small\nrange.",
+        on_click: ->() { $world.placing_tower = ArcherTower }
       )
     end
 
@@ -55,6 +48,12 @@ module GosuGameJam2
       end
       @button.tick
 
+      # TODO: bounds, gold, etc check
+      if $click && $world.placing_tower
+        $world.towers << $world.placing_tower.new(owner: :friendly, position: $cursor)
+        $world.placing_tower = nil
+      end 
+
       $click = false
     end
 
@@ -66,6 +65,8 @@ module GosuGameJam2
         t.draw
       end
       @button.draw
+
+      $world.placing_tower&.draw_blueprint($cursor)
     end
 
     def needs_cursor?

@@ -3,10 +3,10 @@ require_relative '../engine/entity'
 module GosuGameJam2
   # A tower in a fixed position, which has some effect.
   class Tower < Entity
-    def initialize(name:, radius:, owner:, target_team:, cooldown:, **kw)
+    def initialize(name:, owner:, target_team:, cooldown:, **kw)
       super(**kw)
       @name = name
-      @radius = radius
+      @radius = self.class.radius
       @owner = owner
       @target_team = target_team
       @cooldown = cooldown
@@ -30,6 +30,10 @@ module GosuGameJam2
 
     # The time remaining until this tower's effect can next activate, in ticks.
     attr_accessor :remaining_cooldown
+
+    def self.radius
+      raise '.radius unimplemented'
+    end
 
     # Gets all units which this tower could target.
     def targets
@@ -78,6 +82,13 @@ module GosuGameJam2
       Gosu.draw_circle(position.x, position.y, radius, Gosu::Color::WHITE)
 
       $small_font.draw_text("#{name}\n#{remaining_cooldown}/#{cooldown}", position.x + 7, position.y - sprite_height, 1)
+    end
+
+    # Draw a "blueprint" of this tower while the player is deciding where to place it. 
+    def self.draw_blueprint(pos)
+      transparent_red = Gosu::Color.argb(0xFF, 0xFF, 0x00, 0x00)
+      Gosu.draw_rect(pos.x - 5, pos.y - 5, 10, 10, transparent_red)
+      Gosu.draw_circle(pos.x, pos.y, radius, transparent_red)
     end
   end
 end

@@ -5,12 +5,15 @@ module GosuGameJam2
     def initialize(owner:, **kw)
       super(
         name: "Archer",
-        radius: 100,
         owner: owner,
         target_team: :them,
         cooldown: 30,
         **kw
       )
+    end
+
+    def self.radius
+      100
     end
 
     def effect
