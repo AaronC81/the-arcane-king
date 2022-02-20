@@ -11,6 +11,8 @@ module GosuGameJam2
       @path = path
       @speed = speed
       @path_index = 0
+
+      @health_bar_flash_ticks = 0
     end
 
     # The team which this unit belongs to, either :friendly or :enemy.
@@ -21,6 +23,16 @@ module GosuGameJam2
 
     # The current health of this unit.
     attr_accessor :health
+
+    # Deals damage to this unit, killing it if its health falls to or below zero.
+    def damage(amount)
+      self.health -= amount
+      @health_bar_flash_ticks = 5
+
+      if health <= 0
+        $world.units.delete(self)
+      end
+    end
 
     # The path being followed by this unit, of the form [Integer, Symbol], where the Symbol is a
     # cardinal direction (:north etc). The unit will travel in the direction until it reaches the
@@ -81,12 +93,18 @@ module GosuGameJam2
       # Draw a health bar
       health_bar_total_width = 40
       health_bar_remaining_width = ((health.to_f / max_health.to_f) * health_bar_total_width).round
+      if @health_bar_flash_ticks > 0
+        health_bar_colour = Gosu::Color::RED
+        @health_bar_flash_ticks -= 1
+      else
+        health_bar_colour = Gosu::Color::GREEN
+      end
       Gosu.draw_rect(
         position.x - health_bar_total_width / 2,
         position.y - 25,
         health_bar_remaining_width,
         5,
-        Gosu::Color::GREEN,
+        health_bar_colour,
       )
       Gosu.draw_rect(
         position.x - health_bar_total_width / 2 + health_bar_remaining_width,

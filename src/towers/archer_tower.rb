@@ -14,7 +14,7 @@ module GosuGameJam2
     end
 
     def effect
-      targets.sample.health -= 10
+      targets.sample.damage(10)
     end
   end
 end
