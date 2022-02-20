@@ -2,6 +2,7 @@ require 'gosu'
 require_relative 'units/unit'
 require_relative 'towers/tower'
 require_relative 'towers/archer_tower'
+require_relative 'towers/trebuchet_tower'
 require_relative 'ui/button'
 require_relative 'world'
 require_relative 'circle'
@@ -27,14 +28,16 @@ module GosuGameJam2
         team: :enemy,
       )
 
-      @button = Button.new(
-        position: Point.new(1500, 70),
-        width: 120,
-        height: 30,
-        text: "Archer",
-        tooltip: "Deal periodic damage to\none target in a small\nrange.",
-        on_click: ->() { $world.placing_tower = ArcherTower }
-      )
+      [ArcherTower, TrebuchetTower].each.with_index do |klass, i|
+        $world.entities << Button.new(
+          position: Point.new(1500, 70 + i * 50),
+          width: 120,
+          height: 30,
+          text: klass.tower_name,
+          tooltip: klass.description,
+          on_click: ->() { $world.placing_tower = klass }
+        )
+      end
     end
 
     def update
@@ -46,7 +49,9 @@ module GosuGameJam2
       $world.towers.each do |t|
         t.tick
       end
-      @button.tick
+      $world.entities.each do |e|
+        e.tick
+      end
 
       # TODO: bounds, gold, etc check
       if $click && $world.placing_tower
@@ -64,7 +69,9 @@ module GosuGameJam2
       $world.towers.each do |t|
         t.draw
       end
-      @button.draw
+      $world.entities.each do |e|
+        e.draw
+      end
 
       $world.placing_tower&.draw_blueprint($cursor)
     end

@@ -1,34 +1,34 @@
 require_relative 'tower'
 
 module GosuGameJam2
-  class ArcherTower < Tower
+  class TrebuchetTower < Tower
     def initialize(owner:, **kw)
       super(
         owner: owner,
         target_team: :them,
-        cooldown: 30,
+        cooldown: 200,
         **kw
       )
     end
-
+    
     def self.tower_name
-      "Archer"
+      "Trebuchet"
     end
-
+    
     def self.radius
-      100
+      300
     end
 
     def self.description
       <<~END
-        Periodically deals damage
-        to one target in a small
-        range.
+        Slowly fires powerful
+        projectiles across a long
+        range to deal huge damage.
       END
     end
 
     def effect
-      targets.sample.damage(10)
+      targets.sample.damage(40)
     end
   end
 end

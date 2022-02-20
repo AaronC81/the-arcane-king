@@ -3,6 +3,7 @@ module GosuGameJam2
     def initialize
       @units = []
       @towers = []
+      @entities = []
     end
 
     # All units in the world.
@@ -10,6 +11,9 @@ module GosuGameJam2
 
     # All towers in the world.
     attr_accessor :towers
+
+    # Other entities which need to be ticked and drawn.
+    attr_accessor :entities
 
     # The tower class which is currently being placed.
     attr_accessor :placing_tower
