@@ -20,17 +20,17 @@ module GosuGameJam2
       $small_font = Gosu::Font.new(14, name: "Arial")
       $regular_font = Gosu::Font.new(20, name: "Arial")
 
-      $world.units << Unit.new(
-        position: Point.new(30, 30),
-        path: [[1000, :east], [500, :south]],
-        speed: 2,
-        max_health: 100,
-        team: :enemy,
-      )
+      @path = [
+        [400, :east],
+        [800, :south],
+        [800, :east],
+        [100, :north],
+      ]
+      @start_point = Point.new(20, HEIGHT / 2)
 
       [ArcherTower, TrebuchetTower].each.with_index do |klass, i|
         $world.entities << Button.new(
-          position: Point.new(1500, 70 + i * 50),
+          position: Point.new(WIDTH - 100, 70 + i * 50),
           width: 120,
           height: 30,
           text: klass.tower_name,
@@ -38,6 +38,25 @@ module GosuGameJam2
           on_click: ->() { $world.placing_tower = klass }
         )
       end
+
+      $world.entities << Button.new(
+        position: Point.new(WIDTH - 100, HEIGHT - 100),
+        width: 120,
+        height: 30,
+        text: "GO!",
+        tooltip: "Spawn a wave of enemies!",
+        on_click: ->() do
+          5.times do |i|
+            $world.units << Unit.new(
+              position: @start_point.clone + Point.new(i * 40, 0),
+              path: @path,
+              speed: 2,
+              max_health: 100,
+              team: :enemy,
+            )
+          end
+        end
+      )
     end
 
     def update
@@ -63,6 +82,20 @@ module GosuGameJam2
     end
 
     def draw
+      # Draw route lines
+      line_curr_point = @start_point.clone
+      @path.each do |(pos, dir)|
+        new_point = Point.new(
+          (dir == :east || dir == :west) ? pos : line_curr_point.x,
+          (dir == :north || dir == :south) ? pos : line_curr_point.y,
+        )
+        Gosu.draw_line(
+          line_curr_point.x, line_curr_point.y, Gosu::Color::GRAY,
+          new_point.x, new_point.y, Gosu::Color::GRAY,
+        )
+        line_curr_point = new_point
+      end
+      
       $world.units.each do |u|
         u.draw
       end
