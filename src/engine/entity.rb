@@ -5,14 +5,13 @@ require_relative 'box'
 
 module GosuGameJam2 
   class Entity
-    attr_accessor :position, :animations, :scaling, :mirror_x, :rotation, :floors, :opacity
+    attr_accessor :position, :animations, :scaling, :mirror_x, :rotation, :opacity
 
-    def initialize(position: nil, animations: nil, scaling: nil, floors: nil)
+    def initialize(position: nil, animations: nil, scaling: nil)
       @position = position || Point.new(0, 0)
       @animations = animations || {}
       @scaling = scaling || 1
       @rotation = 0
-      @floors = floors || []
       @opacity = 255
 
       @current_animation = nil
