@@ -4,6 +4,9 @@ module GosuGameJam2
       @units = []
       @towers = []
       @entities = []
+
+      @max_castle_health = 2000
+      @castle_health = @max_castle_health
     end
 
     # All units in the world.
@@ -23,6 +26,12 @@ module GosuGameJam2
 
     # The position where the path starts.
     attr_accessor :path_start
+
+    # The maximum health of the friendly castle.
+    attr_accessor :max_castle_health
+
+    # The remaining health of the friendly castle.
+    attr_accessor :castle_health
 
     # Finds and returns all units matching the given criteria:
     #   - `team:`, required, which team the units belong to.

@@ -100,6 +100,13 @@ module GosuGameJam2
 
         # If we're past the path boundary, switch directions
         self.path_index += 1 if path_step_complete?
+      else
+        # This unit reached the end!
+        # Destroy it and, if it's an enemy, take its health off the castle health
+        $world.units.delete(self)
+        if team == :enemy
+          $world.castle_health -= health
+        end
       end
     end
 

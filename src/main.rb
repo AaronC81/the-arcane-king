@@ -41,7 +41,7 @@ module GosuGameJam2
 
       [ArcherTower, LancerTower, TrebuchetTower, BallistaTower, CannonTower, BonfireTower].each.with_index do |klass, i|
         $world.entities << Button.new(
-          position: Point.new(WIDTH - 100, 70 + i * 50),
+          position: Point.new(WIDTH - 150, 200 + i * 50),
           width: 120,
           height: 30,
           text: klass.tower_name,
@@ -51,7 +51,7 @@ module GosuGameJam2
       end
 
       $world.entities << Button.new(
-        position: Point.new(WIDTH - 100, HEIGHT - 100),
+        position: Point.new(WIDTH - 150, HEIGHT - 100),
         width: 120,
         height: 30,
         text: "GO!",
@@ -113,6 +113,8 @@ module GosuGameJam2
 
       $world.placing_tower&.draw_blueprint($cursor)
 
+      $regular_font.draw_text("Castle Health:", 1450, 70, 100)
+      $regular_font.draw_text("#{$world.castle_health}/#{$world.max_castle_health}", 1450, 100, 100)
       $regular_font.draw_text("#{Gosu.fps} FPS", 0, 0, 100)
     end
 
