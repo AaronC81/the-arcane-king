@@ -42,8 +42,8 @@ module GosuGameJam2
       return unless image
 
       image.draw_rot(
-        position.x - image.width / 2 + (mirror_x ? image.width * scaling : 0), position.y - image.height / 2, position.z,
-        rotation, 0, 0,
+        position.x + (mirror_x ? image.width * scaling : 0), position.y, position.z,
+        rotation, 0.5, 0.5,
         scaling * (mirror_x ? -1 : 1),
         scaling,
         Gosu::Color.new(opacity, 255, 255, 255),

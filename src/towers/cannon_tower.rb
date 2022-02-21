@@ -22,6 +22,10 @@ module GosuGameJam2
       250
     end
 
+    def self.image
+      Res.image('cannon.png')
+    end
+
     def self.description
       <<~END
         Launches explosive
@@ -42,6 +46,7 @@ module GosuGameJam2
         intensity: 1,
         explosion: EXPLOSION_RADIUS
       )
+      self.rotation = Gosu.angle(position.x, position.y, primary_target.position.x, primary_target.position.y)
     end
   end
 end
