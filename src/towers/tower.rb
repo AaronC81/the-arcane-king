@@ -120,9 +120,55 @@ module GosuGameJam2
         w = 10
         h = 10
       end
-      transparent_red = Gosu::Color.argb(0xFF, 0xFF, 0x00, 0x00)
-      Gosu.draw_rect(pos.x - w / 2, pos.y - h / 2, w, h, transparent_red)
-      Gosu.draw_circle(pos.x, pos.y, radius, transparent_red)
+
+      if can_place_at?(pos)
+        colour = Gosu::Color.argb(0xFF, 0x00, 0xFF, 0x00)
+      else
+        colour = Gosu::Color.argb(0xFF, 0xFF, 0x00, 0x00)
+      end
+
+      Gosu.draw_rect(pos.x - w / 2, pos.y - h / 2, w, h, colour)
+      Gosu.draw_circle(pos.x, pos.y, radius, colour)
+    end
+
+    def self.can_place_at?(pos)
+      if image
+        w = image.width
+        h = image.height
+      else
+        w = 10
+        h = 10
+      end
+
+      this_bounding_box = Box.new(Point.new(pos.x, pos.y), w, h)
+
+      # Check it's not overlapping any other towers
+      $world.towers.each do |tower|
+        next unless tower.image
+        return false if tower.bounding_box.overlaps?(this_bounding_box)
+      end
+
+      # Check it's not on the path
+      path_clearance = 20
+      $world.trace_path do |s, e|
+        min_x = [s.x, e.x].min
+        max_x = [s.x, e.x].max
+        min_y = [s.y, e.y].min
+        max_y = [s.y, e.y].max
+
+        # Draw a bounding box around each path segment
+        # (+ w and + h offset for the funky bounding box of the tower)
+        segment_box = Box.new(
+          Point.new(min_x - path_clearance + w / 2, min_y - path_clearance + h / 2),
+          (max_x - min_x) + path_clearance * 2,
+          (max_y - min_y) + path_clearance * 2,
+        )
+
+        return false if this_bounding_box.overlaps?(segment_box)
+      end
+
+      # All good!
+      true
     end
   end
 end

@@ -10,6 +10,7 @@ module GosuGameJam2
       @team = team
       @path = path
       @speed = speed
+      @speed_buffs = {}
       @path_index = 0
 
       @health_bar_flash_ticks = 0
@@ -23,6 +24,10 @@ module GosuGameJam2
 
     # The current health of this unit.
     attr_accessor :health
+
+    # Speed changes which are being applied to this unit. A hash of the tower applying the debuff
+    # to [change, multiplier]
+    attr_accessor :speed_buffs
 
     # Deals damage to this unit, killing it if its health falls to or below zero.
     def damage(amount)
@@ -60,20 +65,37 @@ module GosuGameJam2
       !path.nil? && !path[path_index].nil?
     end
 
-    # The speed at which this unit moves, in units-per-tick.
+    # The base speed at which this unit moves, in units-per-tick.
     attr_accessor :speed
+
+    # The current speed at which this unit moves, taking into account any changes, in units-per-tick.
+    def current_speed
+      s = speed
+      speed_buffs.each do |_, (change, _)|
+        s *= change
+      end
+      s
+    end
 
     def tick
       super
+
+      # Tick down speed buffs, and delete any which have expired
+      speed_buffs.each do |k, v|
+        v[1] -= 1
+      end
+      speed_buffs.delete_if do |k, v|
+        v[1] <= 0
+      end
 
       # If this object is still following a path...
       if on_path?
         # Move based on speed
         self.position += Point.new(*{
-          north: [0, -speed],
-          south: [0, speed],
-          east: [speed, 0],
-          west: [-speed, 0],
+          north: [0, -current_speed],
+          south: [0, current_speed],
+          east: [current_speed, 0],
+          west: [-current_speed, 0],
         }[direction])
 
         # If we're past the path boundary, switch directions

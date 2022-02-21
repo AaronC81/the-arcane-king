@@ -3,8 +3,11 @@ require_relative 'res'
 require_relative 'units/unit'
 require_relative 'towers/tower'
 require_relative 'towers/archer_tower'
+require_relative 'towers/lancer_tower'
 require_relative 'towers/trebuchet_tower'
+require_relative 'towers/ballista_tower'
 require_relative 'towers/cannon_tower'
+require_relative 'towers/bonfire_tower'
 require_relative 'ui/button'
 require_relative 'world'
 require_relative 'circle'
@@ -22,7 +25,7 @@ module GosuGameJam2
       $small_font = Gosu::Font.new(14, name: "Arial")
       $regular_font = Gosu::Font.new(20, name: "Arial")
 
-      @path = [
+      $world.path = [
         [300, :east],
         [800, :south],
         [500, :east],
@@ -31,12 +34,12 @@ module GosuGameJam2
         [500, :south],
         [700, :west],
         [700, :south],
-        [1200, :west],
+        [1200, :east],
         [200, :north],
       ]
-      @start_point = Point.new(20, HEIGHT / 2)
+      $world.path_start = Point.new(20, HEIGHT / 2)
 
-      [ArcherTower, TrebuchetTower, CannonTower].each.with_index do |klass, i|
+      [ArcherTower, LancerTower, TrebuchetTower, BallistaTower, CannonTower, BonfireTower].each.with_index do |klass, i|
         $world.entities << Button.new(
           position: Point.new(WIDTH - 100, 70 + i * 50),
           width: 120,
@@ -56,9 +59,9 @@ module GosuGameJam2
         on_click: ->() do
           5.times do |i|
             $world.units << Unit.new(
-              position: @start_point.clone + Point.new(i * 40, 0),
-              path: @path,
-              speed: 2,
+              position: $world.path_start.clone + Point.new(i * 40.0, 0.0),
+              path: $world.path,
+              speed: 2.0,
               max_health: 100,
               team: :enemy,
             )
@@ -81,7 +84,7 @@ module GosuGameJam2
       end
 
       # TODO: bounds, gold, etc check
-      if $click && $world.placing_tower
+      if $click && $world.placing_tower && $world.placing_tower.can_place_at?($cursor)
         $world.towers << $world.placing_tower.new(owner: :friendly, position: $cursor)
         $world.placing_tower = nil
       end 
@@ -91,17 +94,11 @@ module GosuGameJam2
 
     def draw
       # Draw route lines
-      line_curr_point = @start_point.clone
-      @path.each do |(pos, dir)|
-        new_point = Point.new(
-          (dir == :east || dir == :west) ? pos : line_curr_point.x,
-          (dir == :north || dir == :south) ? pos : line_curr_point.y,
-        )
+      $world.trace_path do |s, e|
         Gosu.draw_line(
-          line_curr_point.x, line_curr_point.y, Gosu::Color::GRAY,
-          new_point.x, new_point.y, Gosu::Color::GRAY,
+          s.x, s.y, Gosu::Color::GRAY,
+          e.x, e.y, Gosu::Color::GRAY,
         )
-        line_curr_point = new_point
       end
       
       $world.units.each do |u|
