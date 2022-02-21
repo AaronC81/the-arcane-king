@@ -4,6 +4,7 @@ require_relative 'units/unit'
 require_relative 'towers/tower'
 require_relative 'towers/archer_tower'
 require_relative 'towers/trebuchet_tower'
+require_relative 'towers/cannon_tower'
 require_relative 'ui/button'
 require_relative 'world'
 require_relative 'circle'
@@ -22,14 +23,20 @@ module GosuGameJam2
       $regular_font = Gosu::Font.new(20, name: "Arial")
 
       @path = [
-        [400, :east],
+        [300, :east],
         [800, :south],
-        [800, :east],
+        [500, :east],
         [100, :north],
+        [1000, :east],
+        [500, :south],
+        [700, :west],
+        [700, :south],
+        [1200, :west],
+        [200, :north],
       ]
       @start_point = Point.new(20, HEIGHT / 2)
 
-      [ArcherTower, TrebuchetTower].each.with_index do |klass, i|
+      [ArcherTower, TrebuchetTower, CannonTower].each.with_index do |klass, i|
         $world.entities << Button.new(
           position: Point.new(WIDTH - 100, 70 + i * 50),
           width: 120,

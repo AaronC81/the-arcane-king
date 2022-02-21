@@ -70,11 +70,10 @@ module GosuGameJam2
       # For subclasses to override!
     end
 
-    def create_trail(to:, colour:, intensity:)
+    def create_trail(intensity:, **kw)
       $world.entities << ProjectileTrail.new(
         from: self.position,
-        to: to,
-        colour: colour,
+        **kw,
         opacity: (intensity * 255).round,
       )
     end

@@ -16,7 +16,7 @@ module GosuGameJam2
     end
 
     def self.radius
-      120
+      200
     end
     
     def self.image

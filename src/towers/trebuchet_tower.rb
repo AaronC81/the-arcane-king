@@ -16,7 +16,7 @@ module GosuGameJam2
     end
     
     def self.radius
-      300
+      400
     end
 
     def self.description
@@ -29,7 +29,7 @@ module GosuGameJam2
 
     def effect
       target = targets.sample
-      target.damage(40)
+      target.damage(100)
       create_trail(to: target.position, colour: Gosu::Color::WHITE, intensity: 1)
     end
   end
