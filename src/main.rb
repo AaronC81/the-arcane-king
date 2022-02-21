@@ -108,7 +108,7 @@ module GosuGameJam2
         t.draw
       end
       $world.entities.each do |e|
-        e.draw
+        e.draw unless e.is_a?(Button) && $world.placing_tower
       end
 
       $world.placing_tower&.draw_blueprint($cursor)
@@ -116,6 +116,14 @@ module GosuGameJam2
       $regular_font.draw_text("Castle Health:", 1450, 70, 100)
       $regular_font.draw_text("#{$world.castle_health}/#{$world.max_castle_health}", 1450, 100, 100)
       $regular_font.draw_text("#{Gosu.fps} FPS", 0, 0, 100)
+
+      if $world.placing_tower
+        Res.image("left_click.png").draw(1450, 203)
+        $regular_font.draw_text("Confirm", 1490, 210, 100)
+
+        Res.image("right_click.png").draw(1450, 303)
+        $regular_font.draw_text("Cancel\nbuilding", 1490, 300, 100)
+      end
     end
 
     def needs_cursor?
@@ -128,6 +136,8 @@ module GosuGameJam2
       case id
       when Gosu::MsLeft
         $click = true
+      when Gosu::MsRight
+        $world.placing_tower = nil
       end
     end
   end
