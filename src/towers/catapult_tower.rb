@@ -1,7 +1,7 @@
 require_relative 'tower'
 
 module GosuGameJam2
-  class TrebuchetTower < Tower
+  class CatapultTower < Tower
     def initialize(owner:, **kw)
       super(
         owner: owner,
@@ -12,11 +12,15 @@ module GosuGameJam2
     end
     
     def self.tower_name
-      "Trebuchet"
+      "Catapult"
     end
     
     def self.radius
       400
+    end
+
+    def self.image
+      Res.image('catapult.png')
     end
 
     def self.description
@@ -31,6 +35,7 @@ module GosuGameJam2
       target = targets.sample
       target.damage(100)
       create_trail(to: target.position, colour: Gosu::Color::WHITE, intensity: 1)
+      rotate_towards(target.position)
     end
   end
 end

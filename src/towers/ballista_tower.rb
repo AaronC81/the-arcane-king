@@ -19,6 +19,10 @@ module GosuGameJam2
       500
     end
 
+    def self.image
+      Res.image('ballista.png')
+    end
+
     def self.description
       <<~END
         Launches collosal projectiles,
@@ -33,6 +37,7 @@ module GosuGameJam2
       target.damage(150)
       target.speed_buffs[self] = [0.05, 90] # Not completely immobile so can't stall forever!
       create_trail(to: target.position, colour: Gosu::Color::WHITE, intensity: 2)
+      rotate_towards(target.position)
     end
   end
 end

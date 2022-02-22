@@ -46,7 +46,7 @@ module GosuGameJam2
         intensity: 1,
         explosion: EXPLOSION_RADIUS
       )
-      self.rotation = Gosu.angle(position.x, position.y, primary_target.position.x, primary_target.position.y)
+      rotate_towards(primary_target.position)
     end
   end
 end

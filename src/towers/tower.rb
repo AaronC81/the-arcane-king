@@ -170,5 +170,9 @@ module GosuGameJam2
       # All good!
       true
     end
+
+    def rotate_towards(point)
+      self.rotation = Gosu.angle(position.x, position.y, point.x, point.y)
+    end
   end
 end
