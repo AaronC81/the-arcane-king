@@ -100,7 +100,6 @@ module GosuGameJam2
       # Draw ground
       ((0.8 * WIDTH) / TILE_SIZE).round.times do |x|
         (HEIGHT / TILE_SIZE).round.times do |y|
-          p [x, y]
           Res.image("ground/flat.png").draw(x * TILE_SIZE, y * TILE_SIZE, 0)
         end
       end
