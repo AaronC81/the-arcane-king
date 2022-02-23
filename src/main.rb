@@ -1,6 +1,12 @@
 require 'gosu'
 require_relative 'res'
+require_relative 'ui/button'
+require_relative 'circle'
+
 require_relative 'units/unit'
+require_relative 'units/scout_unit'
+require_relative 'units/brute_unit'
+
 require_relative 'towers/tower'
 require_relative 'towers/archer_tower'
 require_relative 'towers/outpost_tower'
@@ -8,9 +14,9 @@ require_relative 'towers/catapult_tower'
 require_relative 'towers/ballista_tower'
 require_relative 'towers/cannon_tower'
 require_relative 'towers/watchtower_tower'
-require_relative 'ui/button'
+
 require_relative 'world'
-require_relative 'circle'
+
 
 # Not a pixel art game, but fixes weird lines between tiles when upscaled
 Gosu::enable_undocumented_retrofication
@@ -61,15 +67,7 @@ module GosuGameJam2
         text: "GO!",
         tooltip: "Spawn a wave of enemies!",
         on_click: ->() do
-          5.times do |i|
-            $world.units << Unit.new(
-              position: $world.path_start.clone + Point.new(i * 40.0, 0.0),
-              path: $world.path,
-              speed: 2.0,
-              max_health: 100,
-              team: :enemy,
-            )
-          end
+          $world.generate_wave(50)
         end
       )
     end
@@ -77,6 +75,7 @@ module GosuGameJam2
     def update
       $cursor = Point.new(mouse_x.to_i, mouse_y.to_i)
 
+      $world.tick
       $world.units.each do |u|
         u.tick
       end

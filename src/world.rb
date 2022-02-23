@@ -1,9 +1,14 @@
 module GosuGameJam2
   class World
+    SPAWNABLE_UNITS = [
+      ScoutUnit, BruteUnit
+    ]
+
     def initialize
       @units = []
       @towers = []
       @entities = []
+      @pending_unit_spawns = []
 
       @max_castle_health = 2000
       @castle_health = @max_castle_health
@@ -32,6 +37,22 @@ module GosuGameJam2
 
     # The remaining health of the friendly castle.
     attr_accessor :castle_health
+
+    # Units which will be spawned in a certain amount of ticks.
+    attr_accessor :pending_unit_spawns
+
+    def tick
+      pending_unit_spawns.map! do |(time, unit)|
+        time -= 1
+        if time <= 0
+          $world.units << unit
+          nil
+        else
+          [time, unit]
+        end
+      end
+      pending_unit_spawns.compact!
+    end
 
     # Finds and returns all units matching the given criteria:
     #   - `team:`, required, which team the units belong to.
@@ -80,6 +101,26 @@ module GosuGameJam2
         pos * TILE_SIZE
       when :north, :south
         HEIGHT / 2 - pos * TILE_SIZE
+      end
+    end
+
+    # Given a total cost, generates a new wave of enemy units.
+    def generate_wave(cost)
+      units_to_spawn = []
+
+      loop do
+        available_units = SPAWNABLE_UNITS.filter { |u| u.spawn_cost <= cost }
+        break if available_units.empty?
+
+        unit = available_units.sample
+        units_to_spawn << unit.new(:enemy)
+        cost -= unit.spawn_cost
+      end
+   
+      time = 10
+      self.pending_unit_spawns = units_to_spawn.shuffle.map do |u|
+        time += rand(10..30)
+        [time, u]
       end
     end
   end

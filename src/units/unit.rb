@@ -3,12 +3,13 @@ require_relative '../engine/entity'
 module GosuGameJam2
   # A unit which moves along a fixed path automatically.
   class Unit < Entity
-    def initialize(max_health:, team:, path:, speed:, **kw)
+    def initialize(max_health:, team:, speed:, **kw)
       super(**kw)
       @max_health = max_health
       @health = max_health
       @team = team
-      @path = path
+      @path = $world.path.clone
+      @position = $world.path_start.clone + Point.new(-10, 0)
       @speed = speed
       @speed_buffs = {}
       @path_index = 0
@@ -134,6 +135,7 @@ module GosuGameJam2
         health_bar_remaining_width,
         5,
         health_bar_colour,
+        100,
       )
       Gosu.draw_rect(
         position.x - health_bar_total_width / 2 + health_bar_remaining_width,
@@ -141,6 +143,7 @@ module GosuGameJam2
         health_bar_total_width - health_bar_remaining_width,
         5,
         Gosu::Color::GRAY,
+        100,
       )
     end
   end
