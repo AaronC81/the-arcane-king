@@ -8,8 +8,8 @@ module GosuGameJam2
       @max_health = max_health
       @health = max_health
       @team = team
-      @path = $world.path.clone
-      @position = $world.path_start.clone + Point.new(-10, 0)
+      @path = $world.path.clone.map { |p, d| [p + rand(-0.3..0.3), d] }
+      @position = $world.path_start.clone + Point.new(-10, rand(-10..10))
       @speed = speed
       @speed_buffs = {}
       @path_index = 0
