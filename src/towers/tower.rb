@@ -1,6 +1,7 @@
 require_relative '../engine/entity'
 require_relative '../engine/animation'
 require_relative '../effects/projectile_trail'
+require_relative '../ui/tooltip'
 
 module GosuGameJam2
   # A tower in a fixed position, which has some effect.
@@ -13,6 +14,14 @@ module GosuGameJam2
       @cooldown = cooldown
       @remaining_cooldown = 0
     end
+
+    # Tooltip setup
+    def width; image&.width || 20; end
+    def height; image&.width || 20; end
+    include Tooltip
+    def tooltip; self.class.tower_name; end
+    def drawn_centred?; true; end
+    undef tooltip=
 
     # The radius which this tower can target.
     attr_accessor :radius
@@ -107,8 +116,10 @@ module GosuGameJam2
         )
       end
 
-      # Draw a circle for the radius
-      Gosu.draw_circle(position.x, position.y, radius, Gosu::Color::WHITE)
+      # If hovering, draw tooltip and circle for the radius
+      draw_tooltip do
+        Gosu.draw_circle(position.x, position.y, radius, Gosu::Color::WHITE)
+      end
     end
 
     # Draw a "blueprint" of this tower while the player is deciding where to place it. 
