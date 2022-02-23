@@ -1,17 +1,17 @@
 require_relative 'unit'
 
 module GosuGameJam2
-  class BruteUnit < Unit
+  class InvaderUnit < Unit
     def initialize(team)
       super(
         team: team,
-        speed: 1.4,
-        max_health: 100,
+        speed: 2.6,
+        max_health: 60,
       )
     end
 
     def self.spawn_cost
-      25
+      40
     end
   end
 end

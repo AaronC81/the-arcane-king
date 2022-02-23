@@ -6,6 +6,10 @@ require_relative 'circle'
 require_relative 'units/unit'
 require_relative 'units/scout_unit'
 require_relative 'units/brute_unit'
+require_relative 'units/knight_unit'
+require_relative 'units/giant_unit'
+require_relative 'units/cavalry_unit'
+require_relative 'units/invader_unit'
 
 require_relative 'towers/tower'
 require_relative 'towers/archer_tower'
@@ -67,7 +71,7 @@ module GosuGameJam2
         text: "GO!",
         tooltip: "Spawn a wave of enemies!",
         on_click: ->() do
-          $world.generate_wave(50)
+          $world.generate_wave(1000)
         end
       )
     end

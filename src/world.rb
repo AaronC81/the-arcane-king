@@ -1,7 +1,7 @@
 module GosuGameJam2
   class World
     SPAWNABLE_UNITS = [
-      ScoutUnit, BruteUnit
+      ScoutUnit, BruteUnit, CavalryUnit, GiantUnit, InvaderUnit, KnightUnit
     ]
 
     def initialize
@@ -119,7 +119,7 @@ module GosuGameJam2
    
       time = 10
       self.pending_unit_spawns = units_to_spawn.shuffle.map do |u|
-        time += rand(10..30)
+        time += rand(5..30)
         [time, u]
       end
     end
