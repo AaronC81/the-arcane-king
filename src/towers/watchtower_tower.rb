@@ -21,10 +21,10 @@ module GosuGameJam2
     
     def self.description
       <<~END
-        Produces a thick fog in a
-        small area, significantly
-        slowing down all enemies
-        in its entire area.
+        Slows down all enemies
+        in its radius, allowing
+        towers more time to
+        attack.
       END
     end
 
