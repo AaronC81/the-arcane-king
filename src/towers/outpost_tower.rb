@@ -1,7 +1,7 @@
 require_relative 'tower'
 
 module GosuGameJam2
-  class LancerTower < Tower
+  class OutpostTower < Tower
     def initialize(owner:, **kw)
       super(
         owner: owner,
@@ -12,20 +12,24 @@ module GosuGameJam2
     end
 
     def self.tower_name
-      "Lancer"
+      "Outpost"
     end
 
     def self.radius
-      60
+      75
     end
 
     def self.description
       <<~END
-        Melee lancer unit with a
-        very limited range. Rapidly
-        stabs enemies, slowing those
-        hit.
+        An output stationed with melee
+        lancers, with a very limited
+        range. Rapidly stabs enemies,
+        slowing those hit.
       END
+    end
+
+    def self.image
+      Res.image('outpost.png')
     end
 
     def effect

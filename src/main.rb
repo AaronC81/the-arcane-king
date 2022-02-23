@@ -3,7 +3,7 @@ require_relative 'res'
 require_relative 'units/unit'
 require_relative 'towers/tower'
 require_relative 'towers/archer_tower'
-require_relative 'towers/lancer_tower'
+require_relative 'towers/outpost_tower'
 require_relative 'towers/catapult_tower'
 require_relative 'towers/ballista_tower'
 require_relative 'towers/cannon_tower'
@@ -39,7 +39,7 @@ module GosuGameJam2
       ]
       $world.path_start = Point.new(20, HEIGHT / 2)
 
-      [ArcherTower, LancerTower, CatapultTower, BallistaTower, CannonTower, BonfireTower].each.with_index do |klass, i|
+      [ArcherTower, OutpostTower, CatapultTower, BallistaTower, CannonTower, BonfireTower].each.with_index do |klass, i|
         $world.entities << Button.new(
           position: Point.new(WIDTH - 150, 200 + i * 50),
           width: 120,
