@@ -36,7 +36,7 @@ module GosuGameJam2
       target = targets.sample
       target.damage(5)
       target.speed_buffs[self] = [0.7, 20]
-      create_trail(to: target.position, colour: Gosu::Color::GRAY, intensity: 0.3)
+      create_trail(to: target.position, colour: Gosu::Color::WHITE, intensity: 0.35)
     end
   end
 end

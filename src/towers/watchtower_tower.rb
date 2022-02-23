@@ -1,7 +1,7 @@
 require_relative 'tower'
 
 module GosuGameJam2
-  class BonfireTower < Tower
+  class WatchtowerTower < Tower
     def initialize(owner:, **kw)
       super(
         owner: owner,
@@ -12,7 +12,7 @@ module GosuGameJam2
     end
 
     def self.tower_name
-      "Bonfire"
+      "Watchtower"
     end
 
     def self.radius
@@ -26,6 +26,10 @@ module GosuGameJam2
         slowing down all enemies
         in its entire area.
       END
+    end
+
+    def self.image
+      Res.image('watchtower.png')
     end
 
     def effect

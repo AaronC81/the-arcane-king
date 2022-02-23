@@ -51,15 +51,35 @@ module GosuGameJam2
 
     # Yields the given block with each of the lines which make up the path, in the form [start, end]
     # where both are points.
-    def trace_path
+    def trace_path(with_direction: false)
       line_curr_point = path_start.clone
       path.each do |(pos, dir)|
+        pos = path_component_to_coordinate([pos, dir])
         new_point = Point.new(
           (dir == :east || dir == :west) ? pos : line_curr_point.x,
           (dir == :north || dir == :south) ? pos : line_curr_point.y,
         )
-        yield [line_curr_point, new_point].map(&:clone)
+
+        points = [line_curr_point, new_point].map(&:clone)
+        if with_direction
+          yield [*points, dir]
+        else
+          yield points
+        end
+
         line_curr_point = new_point
+      end
+    end
+
+    # Converts one component of a path to a coordinate, on the axis which the path component moves
+    # along.
+    def path_component_to_coordinate(comp)
+      pos, dir = *comp
+      case dir
+      when :east, :west
+        pos * TILE_SIZE
+      when :north, :south
+        HEIGHT / 2 - pos * TILE_SIZE
       end
     end
   end

@@ -54,7 +54,7 @@ module GosuGameJam2
 
     # Returns true if the unit should advance to the next step in its path.
     def path_step_complete?
-      coord = path[path_index][0]
+      coord = $world.path_component_to_coordinate(path[path_index])
       (direction == :north && position.y <= coord) \
         || (direction == :south && position.y >= coord) \
         || (direction == :east && position.x >= coord) \

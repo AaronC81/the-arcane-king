@@ -149,7 +149,7 @@ module GosuGameJam2
       end
 
       # Check it's not on the path
-      path_clearance = 20
+      path_clearance = 22
       $world.trace_path do |s, e|
         min_x = [s.x, e.x].min
         max_x = [s.x, e.x].max
