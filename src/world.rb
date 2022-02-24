@@ -9,9 +9,10 @@ module GosuGameJam2
       @towers = []
       @entities = []
       @pending_unit_spawns = []
-
+      
       @max_castle_health = 2000
       @castle_health = @max_castle_health
+      @wave = 1
     end
 
     # All units in the world.
@@ -40,6 +41,17 @@ module GosuGameJam2
 
     # Units which will be spawned in a certain amount of ticks.
     attr_accessor :pending_unit_spawns
+
+    # The current wave number.
+    attr_accessor :wave
+
+    def wave_in_progress?
+      remaining_enemies > 0
+    end
+
+    def remaining_enemies
+      pending_unit_spawns.length + units.length
+    end
 
     def tick
       pending_unit_spawns.map! do |(time, unit)|

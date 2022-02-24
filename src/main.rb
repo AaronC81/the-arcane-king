@@ -71,7 +71,8 @@ module GosuGameJam2
         text: "GO!",
         tooltip: "Spawn a wave of enemies!",
         on_click: ->() do
-          $world.generate_wave(1000)
+          # Wave difficulty curve
+          $world.generate_wave(($world.wave ** 1.75) * 25)
         end
       )
     end
@@ -97,6 +98,11 @@ module GosuGameJam2
       end 
 
       $click = false
+
+      # If a wave just ended, increment wave number
+      $world.wave += 1 if @wave_in_progress_last_tick && !$world.wave_in_progress?
+
+      @wave_in_progress_last_tick = $world.wave_in_progress?
     end
 
     def draw
@@ -180,13 +186,16 @@ module GosuGameJam2
         t.draw
       end
       $world.entities.each do |e|
-        e.draw unless e.is_a?(Button) && $world.placing_tower
+        e.draw unless e.is_a?(Button) && ($world.placing_tower || $world.wave_in_progress?)
       end
 
       $world.placing_tower&.draw_blueprint($cursor)
 
       $regular_font.draw_text("Castle Health:", 1450, 70, 100)
       $regular_font.draw_text("#{$world.castle_health}/#{$world.max_castle_health}", 1450, 100, 100)
+
+      $regular_font.draw_text("Wave #{$world.wave}", 1450, 150, 100)
+
       $regular_font.draw_text("#{Gosu.fps} FPS", 0, 0, 100)
 
       if $world.placing_tower
@@ -195,6 +204,10 @@ module GosuGameJam2
 
         Res.image("right_click.png").draw(1450, 303)
         $regular_font.draw_text("Cancel\nbuilding", 1490, 300, 100)
+      end
+
+      if $world.wave_in_progress?
+        $regular_font.draw_text("#{$world.remaining_enemies} enemies\nremaining", 1450, 210, 100)
       end
     end
 
