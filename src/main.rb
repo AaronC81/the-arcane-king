@@ -219,7 +219,7 @@ module GosuGameJam2
       )
       Gosu.draw_rect(
         WIDTH - 300, 130,
-        260 * ($world.castle_health.to_f / $world.max_castle_health), 20,
+        260 * [($world.castle_health.to_f / $world.max_castle_health), 0].max, 20,
         THEME_BROWN
       )
 
