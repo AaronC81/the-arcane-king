@@ -34,10 +34,11 @@ module GosuGameJam2
     def initialize
       super(WIDTH, HEIGHT)
       $world = World.new
-      
-      # TODO: Find better font and bundle into files
-      $small_font = Gosu::Font.new(14, name: "Arial")
-      $regular_font = Gosu::Font.new(20, name: "Arial")
+            
+      $regular_font_medieval = Gosu::Font.new(28, name: "#{__dir__}/../res/font/enchanted_land.otf")
+      $regular_font_plain = Gosu::Font.new(20, name: "Arial")
+
+      $regular_font = $regular_font_medieval
 
       $world.path = [
         [4,  :east],
@@ -229,6 +230,12 @@ module GosuGameJam2
         $click = true
       when Gosu::MsRight
         $world.placing_tower = nil
+      when Gosu::KbF
+        if $regular_font == $regular_font_medieval
+          $regular_font = $regular_font_plain
+        else
+          $regular_font = $regular_font_medieval
+        end
       end
     end
   end

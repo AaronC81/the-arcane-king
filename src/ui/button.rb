@@ -39,7 +39,7 @@ module GosuGameJam2
 
     def draw
       Gosu.draw_rect(position.x, position.y, width, height, background_colour)
-      $regular_font.draw_text(text, position.x + 10, position.y + 10, 2)
+      $regular_font.draw_text(text, position.x + 3, position.y + 3, 2)
 
       draw_tooltip
     end
