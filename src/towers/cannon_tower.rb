@@ -51,6 +51,8 @@ module GosuGameJam2
         explosion: EXPLOSION_RADIUS
       )
       rotate_towards(primary_target.position)
+
+      Res.sample("audio/cannon.wav").play(0.25)
     end
   end
 end

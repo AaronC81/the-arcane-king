@@ -115,6 +115,8 @@ module GosuGameJam2
       @retry_button.tick
 
       if $click && $world.placing_tower && $world.placing_tower.can_place_at?($cursor)
+        Res.sample('audio/place.wav').play
+
         $world.towers << $world.placing_tower.new(owner: :friendly, position: $cursor)
         $world.gold -= $world.placing_tower.gold_cost
         $world.placing_tower = nil

@@ -39,6 +39,8 @@ module GosuGameJam2
       target = targets.sample
       target.damage(10)
       create_trail(to: target.position, colour: Gosu::Color::WHITE, intensity: 0.5)
+
+      Res.sample("audio/archer_#{rand 1..3}.wav").play
     end
   end
 end

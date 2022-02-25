@@ -42,6 +42,8 @@ module GosuGameJam2
       target.speed_buffs[self] = [0.05, 90] # Not completely immobile so can't stall forever!
       create_trail(to: target.position, colour: Gosu::Color::WHITE, intensity: 2)
       rotate_towards(target.position)
+
+      Res.sample("audio/ballista_#{rand 1..3}.wav").play(0.4)
     end
   end
 end

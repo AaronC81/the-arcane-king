@@ -9,6 +9,8 @@ module GosuGameJam2
         cooldown: 5,
         **kw
       )
+
+      @sound_counter = 0
     end
 
     def self.tower_name
@@ -41,6 +43,11 @@ module GosuGameJam2
       target.damage(5)
       target.speed_buffs[self] = [0.7, 20]
       create_trail(to: target.position, colour: Gosu::Color::WHITE, intensity: 0.35)
+
+      # Don't play all the time since it attacks so fast
+      @sound_counter += 1
+      @sound_counter %= 2
+      Res.sample("audio/outpost_#{rand 1..5}.wav").play(0.5) if @sound_counter == 0
     end
   end
 end

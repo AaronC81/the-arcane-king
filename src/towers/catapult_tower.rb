@@ -40,6 +40,8 @@ module GosuGameJam2
       target.damage(100)
       create_trail(to: target.position, colour: Gosu::Color::WHITE, intensity: 1)
       rotate_towards(target.position)
+
+      Res.sample("audio/catapult.wav").play(0.5)
     end
   end
 end
