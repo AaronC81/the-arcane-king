@@ -57,6 +57,10 @@ module GosuGameJam2
       pending_unit_spawns.length + units.length
     end
 
+    def defeated?
+      castle_health <= 0
+    end
+
     def tick
       pending_unit_spawns.map! do |(time, unit)|
         time -= 1

@@ -40,7 +40,11 @@ module GosuGameJam2
       $regular_font_medieval = Gosu::Font.new(28, name: "#{__dir__}/../res/font/enchanted_land.otf")
       $regular_font_plain = Gosu::Font.new(20, name: "Arial")
 
+      $large_font_medieval = Gosu::Font.new(50, name: "#{__dir__}/../res/font/enchanted_land.otf")
+      $large_font_plain = Gosu::Font.new(30, name: "Arial")
+
       $regular_font = $regular_font_medieval
+      $large_font = $large_font_medieval
 
       $world.path = [
         [4,  :east],
@@ -85,6 +89,14 @@ module GosuGameJam2
           $world.generate_wave(($world.wave ** 1.75) * 25)
         end
       )
+
+      @retry_button = Button.new(
+        position: Point.new(WIDTH - 270, 550),
+        width: 200,
+        height: 30,
+        text: "Try again",
+        on_click: -> { initialize },
+      )
     end
 
     def update(fast_forward_tick_num: 0)
@@ -98,8 +110,9 @@ module GosuGameJam2
         t.tick
       end
       $world.entities.each do |e|
-        e.tick
+        e.tick unless e.is_a?(Button) && ($world.placing_tower || $world.wave_in_progress? || $world.defeated?)
       end
+      @retry_button.tick
 
       if $click && $world.placing_tower && $world.placing_tower.can_place_at?($cursor)
         $world.towers << $world.placing_tower.new(owner: :friendly, position: $cursor)
@@ -204,7 +217,15 @@ module GosuGameJam2
         t.draw
       end
       $world.entities.each do |e|
-        e.draw unless e.is_a?(Button) && ($world.placing_tower || $world.wave_in_progress?)
+        e.draw unless e.is_a?(Button) && ($world.placing_tower || $world.wave_in_progress? || $world.defeated?)
+      end
+
+      if $world.defeated?
+        $world.placing_tower = nil
+        @retry_button.draw
+        $large_font.draw_text("Your castle\nhas fallen!", 1370, 300, 100, 1, 1, THEME_BROWN)
+        $regular_font.draw_text("Your kingdom's army was defeated\non wave #{$world.wave} of enemy invasion.", 1320, 410, 100, 1, 1, THEME_BROWN)
+        return
       end
 
       $world.placing_tower&.draw_blueprint($cursor)
@@ -259,8 +280,10 @@ module GosuGameJam2
       when Gosu::KbF
         if $regular_font == $regular_font_medieval
           $regular_font = $regular_font_plain
+          $large_font = $large_font_plain
         else
           $regular_font = $regular_font_medieval
+          $large_font = $large_font_medieval
         end
       end
     end
