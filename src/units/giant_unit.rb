@@ -12,7 +12,13 @@ module GosuGameJam2
     end
 
     def self.spawn_cost
-      90
+      # Don't spawn giants until after the first few waves - they're way too powerful if you start
+      # too slow
+      if $world.wave > 5
+        90
+      else
+        100000
+      end
     end
   end
 end
