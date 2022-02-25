@@ -8,7 +8,17 @@ module GosuGameJam2
         speed: 1.4,
         max_health: 150,
         reward: 20,
+        animations: {
+          walk: Animation.new([
+            Res.image('units/brute.png'),
+            Res.image('units/brute_walk_1.png'),
+            Res.image('units/brute.png'),
+            Res.image('units/brute_walk_2.png'),
+            Res.image('units/brute.png'),
+          ], 8)
+        },
       )
+      self.animation = :walk
     end
 
     def self.spawn_cost

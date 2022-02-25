@@ -16,6 +16,9 @@ module GosuGameJam2
       @reward = reward
 
       @health_bar_flash_ticks = 0
+
+      # We'll spawn facing east
+      self.rotation = 90
     end
 
     # The team which this unit belongs to, either :friendly or :enemy.
@@ -109,7 +112,15 @@ module GosuGameJam2
         }[direction])
 
         # If we're past the path boundary, switch directions
-        self.path_index += 1 if path_step_complete?
+        if path_step_complete?
+          self.path_index += 1 
+          self.rotation = {
+            north: 0,
+            east: 90,
+            south: 180,
+            west: 270,
+          }[direction] if on_path?
+        end
       else
         # This unit reached the end!
         # Destroy it and, if it's an enemy, take its health off the castle health
@@ -121,13 +132,17 @@ module GosuGameJam2
     end
 
     def draw
-      # Draw unit (temporary)
-      sprite_width = 5
-      sprite_height = 5
-      Gosu.draw_rect(
-        position.x - sprite_width, position.y - sprite_height, sprite_width * 2, sprite_height * 2,
-        { friendly: Gosu::Color::BLUE, enemy: Gosu::Color::RED }[team],
-      )
+      if animations.any?
+        super
+      else
+        # Draw unit (temporary)
+        sprite_width = 15
+        sprite_height = 15
+        Gosu.draw_rect(
+          position.x - sprite_width, position.y - sprite_height, sprite_width * 2, sprite_height * 2,
+          { friendly: Gosu::Color::BLUE, enemy: Gosu::Color::RED }[team],
+        )
+      end
 
       # Draw a health bar
       health_bar_total_width = 25

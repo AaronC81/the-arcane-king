@@ -125,7 +125,7 @@ module GosuGameJam2
       $click = false
 
       # If a wave just ended, increment wave number
-      $world.wave += 1 if @wave_in_progress_last_tick && !$world.wave_in_progress?
+      $world.wave += 1 if @wave_in_progress_last_tick && !$world.wave_in_progress? && !$world.defeated?
 
       @wave_in_progress_last_tick = $world.wave_in_progress?
 
