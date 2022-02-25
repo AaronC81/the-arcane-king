@@ -9,7 +9,7 @@ module GosuGameJam2
       super(
         owner: owner,
         target_team: :them,
-        cooldown: 150,
+        cooldown: 250,
         **kw
       )
     end
@@ -36,13 +36,13 @@ module GosuGameJam2
     end
 
     def self.gold_cost
-      500
+      400
     end
 
     def effect
       primary_target = targets.sample
       $world.find_units(team: :enemy, radius: [primary_target.position, EXPLOSION_RADIUS]).each do |t|
-        t.damage(40)
+        t.damage(25)
       end
       create_trail(
         to: primary_target.position,

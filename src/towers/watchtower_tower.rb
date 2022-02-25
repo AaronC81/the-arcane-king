@@ -33,7 +33,7 @@ module GosuGameJam2
     end
 
     def self.gold_cost
-      30
+      25
     end
 
     def effect

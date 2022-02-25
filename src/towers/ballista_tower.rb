@@ -24,7 +24,7 @@ module GosuGameJam2
     end
 
     def self.gold_cost
-      300
+      200
     end
 
     def self.description
