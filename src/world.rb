@@ -135,7 +135,7 @@ module GosuGameJam2
    
       time = 10
       self.pending_unit_spawns = units_to_spawn.shuffle.map do |u|
-        time += rand(5..30)
+        time += rand([5 / [wave / 3, 1].max, 0].max..[30 / [wave / 3, 1].max, 5].max)
         [time, u]
       end
     end

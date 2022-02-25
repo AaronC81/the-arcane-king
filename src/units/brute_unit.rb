@@ -6,7 +6,7 @@ module GosuGameJam2
       super(
         team: team,
         speed: 1.4,
-        max_health: 100,
+        max_health: 150,
         reward: 20,
       )
     end

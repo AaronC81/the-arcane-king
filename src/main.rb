@@ -78,7 +78,7 @@ module GosuGameJam2
       )
     end
 
-    def update
+    def update(fast_forward_tick_num: 0)
       $cursor = Point.new(mouse_x.to_i, mouse_y.to_i)
 
       $world.tick
@@ -104,6 +104,11 @@ module GosuGameJam2
       $world.wave += 1 if @wave_in_progress_last_tick && !$world.wave_in_progress?
 
       @wave_in_progress_last_tick = $world.wave_in_progress?
+
+      # Fast-forward implementation - tick twice if space down
+      if Gosu.button_down?(Gosu::KbSpace) && fast_forward_tick_num < 3
+        update(fast_forward_tick_num: fast_forward_tick_num + 1)
+      end
     end
 
     def draw
@@ -208,7 +213,7 @@ module GosuGameJam2
       end
 
       if $world.wave_in_progress?
-        $regular_font.draw_text("#{$world.remaining_enemies} enemies\nremaining", 1450, 210, 100)
+        $regular_font.draw_text("#{$world.remaining_enemies} enemies\nremaining\n\n\nHold SPACE\nto fast-forward", 1450, 210, 100)
       end
     end
 

@@ -6,13 +6,13 @@ module GosuGameJam2
       super(
         team: team,
         speed: 1.2,
-        max_health: 350,
+        max_health: 400,
         reward: 60,
       )
     end
 
     def self.spawn_cost
-      100
+      90
     end
   end
 end

@@ -43,7 +43,9 @@ module GosuGameJam2
         $world.units.delete(self)
 
         # Reward gold equal to max health
-        $world.gold += reward
+        # Rewards diminish over waves to stop player getting an obscene amount of money, but never
+        # less than 10% of original
+        $world.gold += [reward - (($world.wave) * 4).round, (reward * 0.05).round].max
       end
     end
 
