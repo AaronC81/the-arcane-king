@@ -32,6 +32,10 @@ module GosuGameJam2
       Res.image('outpost.png')
     end
 
+    def self.gold_cost
+      80
+    end
+
     def effect
       target = targets.sample
       target.damage(5)

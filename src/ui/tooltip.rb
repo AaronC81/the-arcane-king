@@ -42,10 +42,10 @@ module GosuGameJam2
         Gosu.draw_rect(
           origin_x, origin_y - text_height - padding * 2,
           text_width + padding * 2, text_height + padding * 2,
-          Gosu::Color.argb(0xAA, 0x00, 0x00, 0x00), 3,
+          Gosu::Color.argb(0xDD, 0x00, 0x00, 0x00), 1000,
         )
         $regular_font.draw_text(
-          tooltip, origin_x + padding, origin_y - text_height - padding, 3, 1, 1,
+          tooltip, origin_x + padding, origin_y - text_height - padding, 1000, 1, 1,
           Gosu::Color::WHITE,
         )
 

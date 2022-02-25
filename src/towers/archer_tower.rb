@@ -31,6 +31,10 @@ module GosuGameJam2
       END
     end
 
+    def self.gold_cost
+      25
+    end
+
     def effect
       target = targets.sample
       target.damage(10)

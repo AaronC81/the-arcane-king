@@ -59,8 +59,9 @@ module GosuGameJam2
           width: 120,
           height: 30,
           text: klass.tower_name,
-          tooltip: klass.description,
-          on_click: ->() { $world.placing_tower = klass }
+          tooltip: "#{klass.description}\nCost: #{klass.gold_cost} gold",
+          enabled: -> { $world.gold >= klass.gold_cost },
+          on_click: -> { $world.placing_tower = klass },
         )
       end
 
@@ -91,9 +92,9 @@ module GosuGameJam2
         e.tick
       end
 
-      # TODO: bounds, gold, etc check
       if $click && $world.placing_tower && $world.placing_tower.can_place_at?($cursor)
         $world.towers << $world.placing_tower.new(owner: :friendly, position: $cursor)
+        $world.gold -= $world.placing_tower.gold_cost
         $world.placing_tower = nil
       end 
 
@@ -194,7 +195,7 @@ module GosuGameJam2
       $regular_font.draw_text("Castle Health:", 1450, 70, 100)
       $regular_font.draw_text("#{$world.castle_health}/#{$world.max_castle_health}", 1450, 100, 100)
 
-      $regular_font.draw_text("Wave #{$world.wave}", 1450, 150, 100)
+      $regular_font.draw_text("Wave #{$world.wave}\n#{$world.gold} gold", 1450, 130, 100)
 
       $regular_font.draw_text("#{Gosu.fps} FPS", 0, 0, 100)
 

@@ -3,7 +3,7 @@ require_relative '../engine/entity'
 module GosuGameJam2
   # A unit which moves along a fixed path automatically.
   class Unit < Entity
-    def initialize(max_health:, team:, speed:, **kw)
+    def initialize(max_health:, team:, speed:, reward:, **kw)
       super(**kw)
       @max_health = max_health
       @health = max_health
@@ -13,6 +13,7 @@ module GosuGameJam2
       @speed = speed
       @speed_buffs = {}
       @path_index = 0
+      @reward = reward
 
       @health_bar_flash_ticks = 0
     end
@@ -30,6 +31,9 @@ module GosuGameJam2
     # to [change, multiplier]
     attr_accessor :speed_buffs
 
+    # The gold reward for defeating this unit.
+    attr_accessor :reward
+
     # Deals damage to this unit, killing it if its health falls to or below zero.
     def damage(amount)
       self.health -= amount
@@ -37,6 +41,9 @@ module GosuGameJam2
 
       if health <= 0
         $world.units.delete(self)
+
+        # Reward gold equal to max health
+        $world.gold += reward
       end
     end
 

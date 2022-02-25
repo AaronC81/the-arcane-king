@@ -23,6 +23,10 @@ module GosuGameJam2
       Res.image('catapult.png')
     end
 
+    def self.gold_cost
+      150
+    end
+
     def self.description
       <<~END
         Slowly fires powerful

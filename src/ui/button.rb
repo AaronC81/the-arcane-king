@@ -5,12 +5,13 @@ module GosuGameJam2
   class Button < Entity
     include Tooltip
 
-    def initialize(width:, height:, text:, on_click: nil, tooltip: nil, **kw)
+    def initialize(width:, height:, text:, on_click: nil, enabled: nil, tooltip: nil, **kw)
       super(**kw)
       @width = width
       @height = height
       @text = text
       @on_click = on_click
+      @enabled = enabled || ->{ true }
       @tooltip = tooltip
     end
 
@@ -23,7 +24,12 @@ module GosuGameJam2
     # A proc to run when the button is clicked.
     attr_accessor :on_click
 
+    # A proc to run to check the button is enabled.
+    attr_accessor :enabled
+
     def background_colour
+      return Gosu::Color.rgb(0x11, 0x11, 0x11) unless enabled.()
+
       if point_inside?($cursor)
         Gosu::Color::FUCHSIA
       else

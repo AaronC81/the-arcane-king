@@ -13,6 +13,7 @@ module GosuGameJam2
       @max_castle_health = 2000
       @castle_health = @max_castle_health
       @wave = 1
+      @gold = 50
     end
 
     # All units in the world.
@@ -44,6 +45,9 @@ module GosuGameJam2
 
     # The current wave number.
     attr_accessor :wave
+
+    # The player's current gold balance.
+    attr_accessor :gold
 
     def wave_in_progress?
       remaining_enemies > 0

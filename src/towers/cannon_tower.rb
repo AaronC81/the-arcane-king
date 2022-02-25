@@ -35,6 +35,10 @@ module GosuGameJam2
       END
     end
 
+    def self.gold_cost
+      500
+    end
+
     def effect
       primary_target = targets.sample
       $world.find_units(team: :enemy, radius: [primary_target.position, EXPLOSION_RADIUS]).each do |t|

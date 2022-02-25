@@ -32,6 +32,10 @@ module GosuGameJam2
       Res.image('watchtower.png')
     end
 
+    def self.gold_cost
+      30
+    end
+
     def effect
       targets.each do |target|
         target.speed_buffs[self] = [0.65, 5]

@@ -7,6 +7,7 @@ module GosuGameJam2
         team: team,
         speed: 3.5,
         max_health: 60,
+        reward: 35,
       )
     end
 

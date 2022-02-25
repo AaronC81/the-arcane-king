@@ -55,6 +55,10 @@ module GosuGameJam2
       nil
     end
 
+    def self.gold_cost
+      raise '.gold_cost unimplemented'
+    end
+
     def image
       self.class.image
     end

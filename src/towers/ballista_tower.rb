@@ -23,6 +23,10 @@ module GosuGameJam2
       Res.image('ballista.png')
     end
 
+    def self.gold_cost
+      300
+    end
+
     def self.description
       <<~END
         Launches collosal projectiles,
