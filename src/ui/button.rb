@@ -53,7 +53,7 @@ module GosuGameJam2
     end
 
     def tick
-      if $click && point_inside?($cursor)
+      if $click && point_inside?($cursor) && enabled.()
         on_click&.()
         $click = false
       end
