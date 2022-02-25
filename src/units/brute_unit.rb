@@ -12,7 +12,12 @@ module GosuGameJam2
     end
 
     def self.spawn_cost
-      25
+      # Don't spawn brutes until after the first few waves - one enemy makes for a boring wave 1
+      if $world.wave > 3
+        30
+      else
+        100000
+      end
     end
   end
 end
