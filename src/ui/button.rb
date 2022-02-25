@@ -28,19 +28,27 @@ module GosuGameJam2
     attr_accessor :enabled
 
     def background_colour
-      return Gosu::Color.rgb(0x11, 0x11, 0x11) unless enabled.()
+      return THEME_BROWN unless enabled.()
 
       if point_inside?($cursor)
-        Gosu::Color::FUCHSIA
+        Gosu::Color.rgb(70, 65, 50)
       else
-        Gosu::Color::GRAY
+        Gosu::Color.rgb(132, 116, 95)
       end
     end
 
     def draw
+      # Draw fill
       Gosu.draw_rect(position.x, position.y, width, height, background_colour)
-      $regular_font.draw_text(text, position.x + 3, position.y + 3, 2)
 
+      # Draw border
+      border_width = 2
+      border_colour = THEME_BROWN
+      Gosu.draw_outline_rect(position.x, position.y, width, height, THEME_BROWN, 2)
+
+      # Draw text
+      text_width = $regular_font.text_width(text)
+      $regular_font.draw_text(text, position.x + (width - text_width) / 2, position.y + 3, 2)
       draw_tooltip
     end
 

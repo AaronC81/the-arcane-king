@@ -1,7 +1,7 @@
 require 'gosu'
 require_relative 'res'
 require_relative 'ui/button'
-require_relative 'circle'
+require_relative 'shapes'
 
 require_relative 'units/unit'
 require_relative 'units/scout_unit'
@@ -30,6 +30,8 @@ module GosuGameJam2
   HEIGHT = 900
   TILE_SIZE = 60
 
+  THEME_BROWN = Gosu::Color.rgb(50, 45, 39)
+
   class GameWindow < Gosu::Window
     def initialize
       super(WIDTH, HEIGHT)
@@ -54,9 +56,9 @@ module GosuGameJam2
       ]
       $world.path_start = Point.new(0, HEIGHT / 2)
 
-      [ArcherTower, OutpostTower, CatapultTower, BallistaTower, CannonTower, WatchtowerTower].each.with_index do |klass, i|
+      make_button = ->(x, y, klass) do
         $world.entities << Button.new(
-          position: Point.new(WIDTH - 150, 200 + i * 50),
+          position: Point.new(x, y),
           width: 120,
           height: 30,
           text: klass.tower_name,
@@ -65,10 +67,16 @@ module GosuGameJam2
           on_click: -> { $world.placing_tower = klass },
         )
       end
+      make_button.(WIDTH - 300, 230, ArcherTower)
+      make_button.(WIDTH - 165, 230, OutpostTower)
+      make_button.(WIDTH - 300, 280, WatchtowerTower)
+      make_button.(WIDTH - 165, 280, CatapultTower)
+      make_button.(WIDTH - 300, 330, BallistaTower)
+      make_button.(WIDTH - 165, 330, CannonTower)
 
       $world.entities << Button.new(
-        position: Point.new(WIDTH - 150, HEIGHT - 100),
-        width: 120,
+        position: Point.new(WIDTH - 270, HEIGHT - 120),
+        width: 200,
         height: 30,
         text: "GO!",
         tooltip: "Spawn a wave of enemies!",
@@ -114,11 +122,14 @@ module GosuGameJam2
 
     def draw
       # Draw ground
-      ((0.8 * WIDTH) / TILE_SIZE).round.times do |x|
+      (WIDTH / TILE_SIZE + 1).round.times do |x|
         (HEIGHT / TILE_SIZE).round.times do |y|
           Res.image("ground/flat.png").draw(x * TILE_SIZE, y * TILE_SIZE, 0)
         end
       end
+
+      # Draw UI background
+      Res.image('scroll.png').draw(WIDTH - 335, 25)
       
       # Draw route lines
       $world.trace_path do |s, e|
@@ -198,23 +209,38 @@ module GosuGameJam2
 
       $world.placing_tower&.draw_blueprint($cursor)
 
-      $regular_font.draw_text("Castle Health:", 1450, 70, 100)
-      $regular_font.draw_text("#{$world.castle_health}/#{$world.max_castle_health}", 1450, 100, 100)
+      # Draw health
+      $regular_font.draw_text("Castle", 1300, 100, 100, 1, 1, THEME_BROWN)
+      $regular_font.draw_text("#{$world.castle_health}/#{$world.max_castle_health}", 1485, 100, 100, 1, 1, THEME_BROWN)
+      Gosu.draw_outline_rect(
+        WIDTH - 300, 130,
+        260, 20,
+        THEME_BROWN, 2
+      )
+      Gosu.draw_rect(
+        WIDTH - 300, 130,
+        260 * ($world.castle_health.to_f / $world.max_castle_health), 20,
+        THEME_BROWN
+      )
 
-      $regular_font.draw_text("Wave #{$world.wave}\n#{$world.gold} gold", 1450, 130, 100)
+      $regular_font.draw_text("Gold: #{$world.gold}", 1300, 190, 100, 1, 1, THEME_BROWN)
+      $regular_font.draw_text("Wave: #{$world.wave}", 1500, 190, 100, 1, 1, THEME_BROWN)
 
       $regular_font.draw_text("#{Gosu.fps} FPS", 0, 0, 100)
 
       if $world.placing_tower
-        Res.image("left_click.png").draw(1450, 203)
-        $regular_font.draw_text("Confirm", 1490, 210, 100)
+        Res.image("left_click.png").draw(1350, 303)
+        $regular_font.draw_text("Confirm", 1390, 310, 100, 1, 1, THEME_BROWN)
 
-        Res.image("right_click.png").draw(1450, 303)
-        $regular_font.draw_text("Cancel\nbuilding", 1490, 300, 100)
+        Res.image("right_click.png").draw(1350, 353)
+        $regular_font.draw_text("Cancel building", 1390, 360, 100, 1, 1, THEME_BROWN)
       end
 
       if $world.wave_in_progress?
-        $regular_font.draw_text("#{$world.remaining_enemies} enemies\nremaining\n\n\nHold SPACE\nto fast-forward", 1450, 210, 100)
+        $regular_font.draw_text(
+          "#{$world.remaining_enemies} enemies remaining\n\nHold SPACE to fast-forward",
+          1320, 300, 100, 1, 1, THEME_BROWN
+        )
       end
     end
 
