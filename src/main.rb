@@ -152,11 +152,7 @@ module GosuGameJam2
 
     def draw
       # Draw ground
-      (WIDTH / TILE_SIZE + 1).round.times do |x|
-        (HEIGHT / TILE_SIZE).round.times do |y|
-          Res.image("ground/flat.png").draw(x * TILE_SIZE, y * TILE_SIZE, 0)
-        end
-      end
+      Res.image("ground/grass.png").draw(0, 0)
 
       # Draw castle
       Res.image("castle.png").draw(1038, -95)
