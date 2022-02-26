@@ -192,7 +192,7 @@ module GosuGameJam2
         e.tick unless e.is_a?(Button) && ($world.placing_tower || $world.wave_in_progress? || $world.defeated?)
       end
       @retry_button.tick
-      @magic_buttons.each(&:tick)
+      @magic_buttons.each(&:tick) unless $world.defeated?
 
       if $click && $world.placing_tower && $world.placing_tower.can_place_at?($cursor)
         Res.sample('audio/place.wav').play
@@ -237,7 +237,7 @@ module GosuGameJam2
       # Draw UI background
       Res.image('scroll.png').draw(WIDTH - 335, 25)
 
-      unless $world.placing_tower || $world.casting_spell
+      unless $world.placing_tower || $world.casting_spell || $world.defeated?
         # Draw magic buttons
         @magic_buttons.each(&:draw)
 
