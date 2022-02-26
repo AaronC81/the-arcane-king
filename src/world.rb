@@ -27,8 +27,12 @@ module GosuGameJam2
       
       @max_castle_health = 2000
       @castle_health = @max_castle_health
+
       @wave = 1
+      @wave = ENV['START_WAVE'].to_i if ENV['START_WAVE']
+
       @gold = 50
+      @gold = 10000000 if ENV['INFINITE_GOLD']
     end
 
     # All units in the world.
