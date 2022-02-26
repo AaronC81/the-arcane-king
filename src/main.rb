@@ -148,14 +148,6 @@ module GosuGameJam2
 
       # Draw UI background
       Res.image('scroll.png').draw(WIDTH - 335, 25)
-      
-      # Draw route lines
-      $world.trace_path do |s, e|
-        Gosu.draw_line(
-          s.x, s.y, Gosu::Color::GRAY,
-          e.x, e.y, Gosu::Color::GRAY,
-        )
-      end
 
       # Draw path
       # TODO: castle at the end
