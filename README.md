@@ -1,4 +1,4 @@
-# Pet Peeve
+# The Arcane King
 
 This is my entry to the [second Gosu Game Jam](https://itch.io/jam/gosu-game-jam-2).
 
