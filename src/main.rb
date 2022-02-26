@@ -91,8 +91,15 @@ module TheArcaneKing
         position: Point.new(WIDTH - 270, HEIGHT - 120),
         width: 200,
         height: 30,
-        text: "GO!",
-        tooltip: "Spawn a wave of enemies!",
+        text: "Bring on the next wave!",
+        tooltip: <<~END,
+          Spawn the next wave of enemies!
+
+          You will not be able to build
+          more towers or buy more spell
+          charges until the end of the
+          wave.
+        END
         on_click: ->() do
           # Wave difficulty curve
           cost = ($world.wave ** 1.75) * 25
