@@ -2,6 +2,8 @@ require 'gosu'
 require_relative 'res'
 require_relative 'ui/button'
 require_relative 'shapes'
+require_relative 'menu'
+require_relative 'engine/transition'
 
 require_relative 'units/unit'
 require_relative 'units/scout_unit'
@@ -25,6 +27,8 @@ require_relative 'world'
 # Not a pixel art game, but fixes weird lines between tiles when upscaled
 Gosu::enable_undocumented_retrofication
 
+$seen_menu = false
+
 module TheArcaneKing
   WIDTH = 1600
   HEIGHT = 900
@@ -36,6 +40,9 @@ module TheArcaneKing
     def initialize
       super(WIDTH, HEIGHT)
       $world = World.new
+
+      @showing_menu = true unless $seen_menu # Don't show menu on reset
+      @transition = Transition.new
             
       $regular_font_medieval = Gosu::Font.new(28, name: "#{__dir__}/../res/font/enchanted_land.otf")
       $regular_font_plain = Gosu::Font.new(20, name: "Arial")
@@ -181,6 +188,10 @@ module TheArcaneKing
     end
 
     def update(fast_forward_tick_num: 0)
+      @transition.tick
+
+      return if @showing_menu
+
       $cursor = Point.new(mouse_x.to_i, mouse_y.to_i)
 
       $world.tick
@@ -234,6 +245,13 @@ module TheArcaneKing
     end
 
     def draw
+      @transition.draw
+
+      if @showing_menu
+        Menu.draw_main_menu
+        return
+      end
+
       # Draw ground
       Res.image("ground/grass.png").draw(0, 0)
 
@@ -389,6 +407,14 @@ module TheArcaneKing
 
       case id
       when Gosu::MsLeft
+        if @showing_menu && !@transition.ongoing?
+          $seen_menu = true
+
+          @transition.fade_out(60) do
+            @showing_menu = false
+            @transition.fade_in(60) {}
+          end
+        end
         $click = true
       when Gosu::MsRight
         $world.placing_tower = nil
