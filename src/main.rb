@@ -143,6 +143,9 @@ module GosuGameJam2
         end
       end
 
+      # Draw castle
+      Res.image("castle.png").draw(1038, -95)
+
       # Draw UI background
       Res.image('scroll.png').draw(WIDTH - 335, 25)
       

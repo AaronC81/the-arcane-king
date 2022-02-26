@@ -68,6 +68,11 @@ module GosuGameJam2
     # Returns true if the unit should advance to the next step in its path.
     def path_step_complete?
       coord = $world.path_component_to_coordinate(path[path_index])
+
+      # Ugly special case - if this is the last element of the path, terminate when we hit the
+      # castle
+      coord = $world.path.last[0] * TILE_SIZE if path[path_index + 1].nil?
+
       (direction == :north && position.y <= coord) \
         || (direction == :south && position.y >= coord) \
         || (direction == :east && position.x >= coord) \
