@@ -385,8 +385,6 @@ module TheArcaneKing
       $regular_font.draw_text("Gold: #{$world.gold}", 1300, 190, 100, 1, 1, THEME_BROWN)
       $regular_font.draw_text("Wave: #{$world.wave}", 1500, 190, 100, 1, 1, THEME_BROWN)
 
-      $regular_font.draw_text("#{Gosu.fps} FPS", 0, 0, 100)
-
       if $world.placing_tower
         Res.image("left_click.png").draw(1350, 303, 0)
         $regular_font.draw_text("Confirm", 1390, 310, 100, 1, 1, THEME_BROWN)
