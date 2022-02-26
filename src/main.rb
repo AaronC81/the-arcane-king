@@ -28,6 +28,7 @@ require_relative 'world'
 Gosu::enable_undocumented_retrofication
 
 $seen_menu = false
+$cursor = TheArcaneKing::Point.new(0, 0)
 
 module TheArcaneKing
   WIDTH = 1600
@@ -42,6 +43,7 @@ module TheArcaneKing
       $world = World.new
 
       @showing_menu = true unless $seen_menu # Don't show menu on reset
+      @showing_tutorial = false
       @transition = Transition.new
             
       $regular_font_medieval = Gosu::Font.new(28, name: "#{__dir__}/../res/font/enchanted_land.otf")
@@ -190,7 +192,7 @@ module TheArcaneKing
     def update(fast_forward_tick_num: 0)
       @transition.tick
 
-      return if @showing_menu
+      return if @showing_menu || @showing_tutorial
 
       $cursor = Point.new(mouse_x.to_i, mouse_y.to_i)
 
@@ -250,6 +252,10 @@ module TheArcaneKing
       if @showing_menu
         Menu.draw_main_menu
         return
+      end
+
+      if @showing_tutorial
+        Menu.draw_tutorial_overlay
       end
 
       # Draw ground
@@ -412,9 +418,17 @@ module TheArcaneKing
 
           @transition.fade_out(60) do
             @showing_menu = false
+            @showing_tutorial = true
             @transition.fade_in(60) {}
           end
         end
+
+        if @showing_tutorial
+          @showing_tutorial = false
+          $click = false # Do not click through
+          return
+        end
+
         $click = true
       when Gosu::MsRight
         $world.placing_tower = nil

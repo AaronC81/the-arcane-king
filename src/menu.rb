@@ -29,5 +29,33 @@ module TheArcaneKing
         Building Music: RandomMind (OpenGameArt.org)
       END
     end
+
+    def self.draw_text_on_box(x, y, text)
+      lines = text.split("\n")
+      text_width = lines.map { |l| $large_font.text_width(l) }.max
+      text_height = lines.length * $large_font.height
+
+      padding = 10
+      Gosu.draw_rect(
+        x, y,
+        text_width + padding * 2, text_height + padding * 2,
+        Gosu::Color.argb(0xDD, 0x00, 0x00, 0x00), 1000,
+      )
+      $large_font.draw_text(
+        text, x + padding, y + padding, 1000, 1, 1,
+        Gosu::Color::WHITE,
+      )
+    end
+
+    def self.draw_tutorial_overlay
+      draw_text_on_box(300, 20, "Your Majesty! Our kingdom is under attack!")
+      draw_text_on_box(900, 60, "When the attackers reach\nour castle, they'll damage it.")
+      draw_text_on_box(910, 200, "Construct defences for\nour army, so that we\nwill defeat them!")
+      draw_text_on_box(910, 420, "You can also use your\narcane ability to cast\ndeadly spells at our foes\nduring battle.")
+      draw_text_on_box(910, 680, "Defeating enemies will\ngrant you gold to buy\ndefences or spell charges.")
+
+      draw_text_on_box(500, 800, "            Dismiss tutorial")
+      Res.image('left_click.png').draw(515, 815, 10000)
+    end
   end
 end
