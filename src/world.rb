@@ -185,21 +185,25 @@ module GosuGameJam2
         targets.each do |t|
           t.damage(35)
         end
+        Res.sample('audio/smite.wav').play
       
       when :stun
         targets = find_units(team: :enemy, radius: [$cursor, radius])
         targets.each do |t|
           t.speed_buffs[self] = [0, 120]
         end
+        Res.sample('audio/stun.wav').play(0.6)
 
       when :slow
         $world.entities << SlowField.new(position: $cursor.clone)
+        Res.sample('audio/slow.wav').play(0.3)
 
       when :bolt
         targets = find_units(team: :enemy, radius: [$cursor, radius])
         rand(1..3).times do
-          targets.sample.damage(99999)
+          targets.sample&.damage(99999)
         end
+        Res.sample('audio/bolt.wav').play(0.3)
 
       else
         raise 'unknown spell - huh!?'
