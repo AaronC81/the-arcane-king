@@ -33,3 +33,8 @@ echo "require_relative 'src/main.rb'" > "$RESOURCES/main.rb"
 
 # Ensure that the Ruby is marked as executable - this was causing problems when testing in a VM!
 chmod +x "$SCRIPT_DIR/build/macos/app/The Arcane King.app/Contents/MacOS/Ruby"
+
+# Zip
+pushd "$SCRIPT_DIR/build/macos/app/"
+zip -r "$SCRIPT_DIR/build/macos/app/The Arcane King.app.zip" "The Arcane King.app"
+popd
