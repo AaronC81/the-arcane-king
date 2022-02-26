@@ -5,14 +5,14 @@ module TheArcaneKing
       Gosu.draw_rect(0, 0, WIDTH, HEIGHT, Gosu::Color::BLACK)
 
       # Draw logo and subtitles
-      Res.image('logo/logo.png').draw(350, 100)
+      Res.image('logo/logo.png').draw(350, 100, 0)
       ['Created by Aaron Christiansen', 'for Gosu Game Jam 2'].each.with_index do |subtitle, i|
         subtitle_length = $large_font.text_width(subtitle)
         $large_font.draw_text(subtitle, (WIDTH - subtitle_length) / 2, 400 + i * 45, 100, 1, 1, Gosu::Color::WHITE)
       end
 
       # Begin prompt
-      Res.image('left_click.png').draw(740, 603)
+      Res.image('left_click.png').draw(740, 603, 0)
       $large_font.draw_text("to begin!", 780, 597, 100, 1, 1, Gosu::Color::WHITE)
 
       # Font hint

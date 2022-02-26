@@ -105,8 +105,8 @@ module TheArcaneKing
     #     away from `point`.
     def find_units(team:, radius: nil)
       units
-        .filter { |u| u.team == team }
-        .filter do |u|
+        .select { |u| u.team == team }
+        .select do |u|
           if radius
             u.position.distance(radius[0]) <= radius[1]
           else
@@ -154,7 +154,7 @@ module TheArcaneKing
       units_to_spawn = []
 
       loop do
-        available_units = SPAWNABLE_UNITS.filter { |u| u.spawn_cost <= cost }
+        available_units = SPAWNABLE_UNITS.select { |u| u.spawn_cost <= cost }
         break if available_units.empty?
 
         unit = available_units.sample

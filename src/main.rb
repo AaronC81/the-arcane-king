@@ -266,13 +266,13 @@ module TheArcaneKing
       end
 
       # Draw ground
-      Res.image("ground/grass.png").draw(0, 0)
+      Res.image("ground/grass.png").draw(0, 0, 0)
 
       # Draw castle
-      Res.image("castle.png").draw(1038, -95)
+      Res.image("castle.png").draw(1038, -95, 0)
 
       # Draw UI background
-      Res.image('scroll.png').draw(WIDTH - 335, 25)
+      Res.image('scroll.png').draw(WIDTH - 335, 25, 0)
 
       unless $world.placing_tower || $world.casting_spell || $world.defeated?
         # Draw magic buttons
@@ -388,18 +388,18 @@ module TheArcaneKing
       $regular_font.draw_text("#{Gosu.fps} FPS", 0, 0, 100)
 
       if $world.placing_tower
-        Res.image("left_click.png").draw(1350, 303)
+        Res.image("left_click.png").draw(1350, 303, 0)
         $regular_font.draw_text("Confirm", 1390, 310, 100, 1, 1, THEME_BROWN)
 
-        Res.image("right_click.png").draw(1350, 353)
+        Res.image("right_click.png").draw(1350, 353, 0)
         $regular_font.draw_text("Cancel building", 1390, 360, 100, 1, 1, THEME_BROWN)
       end
 
       if $world.casting_spell
-        Res.image("left_click.png").draw(1350, 453)
+        Res.image("left_click.png").draw(1350, 453, 0)
         $regular_font.draw_text("Cast", 1390, 460, 100, 1, 1, THEME_BROWN)
 
-        Res.image("right_click.png").draw(1350, 503)
+        Res.image("right_click.png").draw(1350, 503, 0)
         $regular_font.draw_text("Cancel casting", 1390, 510, 100, 1, 1, THEME_BROWN)
       end
 
