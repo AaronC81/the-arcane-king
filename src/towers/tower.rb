@@ -182,6 +182,19 @@ module GosuGameJam2
         return false if this_bounding_box.overlaps?(segment_box)
       end
 
+      # Check it's not overlapping the right UI panel, or the castle
+      # 99% sure there's a mistake in how these boxes are calculated, because that's not actually
+      # where the UI starts, but I just trial-and-errored the coords and found the right ones. 
+      # It'll be fine!
+      return false if this_bounding_box.overlaps?(Box.new(
+        Point.new(WIDTH - 295, 0), 
+        WIDTH, HEIGHT
+      ))
+      return false if this_bounding_box.overlaps?(Box.new(
+        Point.new(WIDTH - 530, 0), 
+        WIDTH, 300
+      ))
+
       # All good!
       true
     end
