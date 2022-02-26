@@ -176,6 +176,8 @@ module GosuGameJam2
       ]
 
       Res.song('audio/build_music.wav').play(true)
+
+      @wave_in_progress_last_tick = false
     end
 
     def update(fast_forward_tick_num: 0)
@@ -191,7 +193,7 @@ module GosuGameJam2
       $world.entities.each do |e|
         e.tick unless e.is_a?(Button) && ($world.placing_tower || $world.wave_in_progress? || $world.defeated?)
       end
-      @retry_button.tick
+      @retry_button.tick if $world.defeated?
       @magic_buttons.each(&:tick) unless $world.defeated?
 
       if $click && $world.placing_tower && $world.placing_tower.can_place_at?($cursor)
@@ -217,6 +219,10 @@ module GosuGameJam2
 
         # Also, if we were about to cast a spell, stop
         $world.casting_spell = nil
+
+        # Give 15 gold, just so the player has some kind of income even if they're getting
+        # completely obliterated
+        $world.gold += 15
       end
 
       @wave_in_progress_last_tick = $world.wave_in_progress?
