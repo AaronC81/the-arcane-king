@@ -183,14 +183,14 @@ module GosuGameJam2
       when :smite
         targets = find_units(team: :enemy, radius: [$cursor, radius])
         targets.each do |t|
-          t.damage(35)
+          t.damage(rand(25..50))
         end
         Res.sample('audio/smite.wav').play
       
       when :stun
         targets = find_units(team: :enemy, radius: [$cursor, radius])
         targets.each do |t|
-          t.speed_buffs[self] = [0, 120]
+          t.speed_buffs[self] = [0, 240]
         end
         Res.sample('audio/stun.wav').play(0.6)
 
