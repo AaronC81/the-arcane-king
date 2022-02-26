@@ -86,7 +86,16 @@ module GosuGameJam2
         tooltip: "Spawn a wave of enemies!",
         on_click: ->() do
           # Wave difficulty curve
-          $world.generate_wave(($world.wave ** 1.75) * 25)
+          cost = ($world.wave ** 1.75) * 25
+          if $world.wave >= 20
+            # Difficulty curve begins to become too easy if they've survived this long - ramp it up
+            # hard!
+            cost *= ($world.wave - 19) * 1.5
+          end
+          $world.generate_wave(cost)
+
+          # Play a battle song
+          Res.song('audio/battle_music.wav').play(true)
         end
       )
 
@@ -97,6 +106,8 @@ module GosuGameJam2
         text: "Try again",
         on_click: -> { initialize },
       )
+
+      Res.song('audio/build_music.wav').play(true)
     end
 
     def update(fast_forward_tick_num: 0)
@@ -124,8 +135,12 @@ module GosuGameJam2
 
       $click = false
 
-      # If a wave just ended, increment wave number
-      $world.wave += 1 if @wave_in_progress_last_tick && !$world.wave_in_progress? && !$world.defeated?
+      # If a wave just ended, increment wave number and stop music
+      if @wave_in_progress_last_tick && !$world.wave_in_progress? && !$world.defeated?
+        $world.wave += 1 
+        Gosu::Song.current_song.stop
+        Res.song('audio/build_music.wav').play(true)
+      end
 
       @wave_in_progress_last_tick = $world.wave_in_progress?
 
