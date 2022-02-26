@@ -9,6 +9,12 @@ module GosuGameJam2
       @towers = []
       @entities = []
       @pending_unit_spawns = []
+      @magic_charges = {
+        smite: 0,
+        stun: 0,
+        slow: 0,
+        bolt: 0,
+      }
       
       @max_castle_health = 2000
       @castle_health = @max_castle_health
@@ -48,6 +54,9 @@ module GosuGameJam2
 
     # The player's current gold balance.
     attr_accessor :gold
+    
+    # The player's charge of each magic spell.
+    attr_accessor :magic_charges
 
     def wave_in_progress?
       remaining_enemies > 0

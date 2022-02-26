@@ -5,11 +5,16 @@ module GosuGameJam2
   class Button < Entity
     include Tooltip
 
-    def initialize(width:, height:, text:, on_click: nil, enabled: nil, tooltip: nil, **kw)
+    def initialize(width: nil, height: nil, text: nil, image: nil, on_click: nil, enabled: nil, tooltip: nil, **kw)
       super(**kw)
       @width = width
       @height = height
       @text = text
+      @image = image
+      if image
+        @width = image.width
+        @height = image.height
+      end
       @on_click = on_click
       @enabled = enabled || ->{ true }
       @tooltip = tooltip
@@ -27,6 +32,9 @@ module GosuGameJam2
     # A proc to run to check the button is enabled.
     attr_accessor :enabled
 
+    # An image to display instead of the standard button text.
+    attr_accessor :image
+
     def background_colour
       return THEME_BROWN unless enabled.()
 
@@ -38,17 +46,22 @@ module GosuGameJam2
     end
 
     def draw
-      # Draw fill
-      Gosu.draw_rect(position.x, position.y, width, height, background_colour)
+      if image
+        image.draw(position.x, position.y, 100, 1, 1, enabled.() ? Gosu::Color::WHITE : Gosu::Color.rgb(70, 70, 70))
+      else
+        # Draw fill
+        Gosu.draw_rect(position.x, position.y, width, height, background_colour)
 
-      # Draw border
-      border_width = 2
-      border_colour = THEME_BROWN
-      Gosu.draw_outline_rect(position.x, position.y, width, height, THEME_BROWN, 2)
+        # Draw border
+        border_width = 2
+        border_colour = THEME_BROWN
+        Gosu.draw_outline_rect(position.x, position.y, width, height, THEME_BROWN, 2)
 
-      # Draw text
-      text_width = $regular_font.text_width(text)
-      $regular_font.draw_text(text, position.x + (width - text_width) / 2, position.y + 3, 2)
+        # Draw text
+        text_width = $regular_font.text_width(text)
+        $regular_font.draw_text(text, position.x + (width - text_width) / 2, position.y + 3, 2)
+      end
+
       draw_tooltip
     end
 

@@ -107,6 +107,59 @@ module GosuGameJam2
         on_click: -> { initialize },
       )
 
+      # Set up magic buttons
+      @magic_buttons = [
+        Button.new(
+          position: Point.new(WIDTH - 290, 420),
+          image: Res.image('magic/smite.png'),
+          enabled: ->{ $world.gold >= 25 && $world.magic_charges[:smite] < 5 },
+          on_click: ->{ $world.gold -= 25 ; $world.magic_charges[:smite] += 1 },
+          tooltip: <<~END
+            SMITE enemies in an area,
+            dealing damage to them.
+
+            Cost: 25 gold
+          END
+        ),
+        Button.new(
+          position: Point.new(WIDTH - 155, 420),
+          image: Res.image('magic/stun.png'),
+          enabled: ->{ $world.gold >= 25 && $world.magic_charges[:stun] < 5 },
+          on_click: ->{ $world.gold -= 25 ; $world.magic_charges[:stun] += 1 },
+          tooltip: <<~END
+            STUN enemies in an area,
+            briefly immobilising them.
+
+            Cost: 25 gold
+          END
+        ),
+        Button.new(
+          position: Point.new(WIDTH - 290, 580),
+          image: Res.image('magic/slow.png'),
+          enabled: ->{ $world.gold >= 25 && $world.magic_charges[:slow] < 5 },
+          on_click: ->{ $world.gold -= 25 ; $world.magic_charges[:slow] += 1 },
+          tooltip: <<~END
+            Cast a rift which SLOWS
+            enemies passing through it.
+
+            Cost: 25 gold
+          END
+        ),
+        Button.new(
+          position: Point.new(WIDTH - 155, 580),
+          image: Res.image('magic/bolt.png'),
+          enabled: ->{ $world.gold >= 25 && $world.magic_charges[:bolt] < 5 },
+          on_click: ->{ $world.gold -= 25 ; $world.magic_charges[:bolt] += 1 },
+          tooltip: <<~END
+            Fire a BOLT which kills one
+            random enemy in the target
+            area.
+
+            Cost: 25 gold
+          END
+        ),
+      ]
+
       Res.song('audio/build_music.wav').play(true)
     end
 
@@ -124,6 +177,7 @@ module GosuGameJam2
         e.tick unless e.is_a?(Button) && ($world.placing_tower || $world.wave_in_progress? || $world.defeated?)
       end
       @retry_button.tick
+      @magic_buttons.each(&:tick)
 
       if $click && $world.placing_tower && $world.placing_tower.can_place_at?($cursor)
         Res.sample('audio/place.wav').play
@@ -159,6 +213,19 @@ module GosuGameJam2
 
       # Draw UI background
       Res.image('scroll.png').draw(WIDTH - 335, 25)
+
+      # Draw magic buttons
+      @magic_buttons.each(&:draw)
+
+      # Draw magic charges
+      [:smite, :stun, :slow, :bolt].zip(@magic_buttons).each do |magic, btn|
+        charges = $world.magic_charges[magic]
+
+        pt = btn.position + Point.new(43 - 8 * (charges - 1), 105)
+        charges.times do |i|
+          Res.image('magic/dot.png').draw(pt.x + i * 15, pt.y, 100)
+        end
+      end
 
       # Draw path
       # TODO: castle at the end
