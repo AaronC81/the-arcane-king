@@ -4,8 +4,8 @@ set -e
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # Prepare folder
-[ -e "$SCRIPT_DIR/build" ] && rm -r "$SCRIPT_DIR/build"
-mkdir "$SCRIPT_DIR/build"
+mkdir -p "$SCRIPT_DIR/build"
+[ -e "$SCRIPT_DIR/build/macos" ] && rm -r "$SCRIPT_DIR/build/macos"
 mkdir "$SCRIPT_DIR/build/macos"
 
 # Download template app
