@@ -25,7 +25,7 @@ require_relative 'world'
 # Not a pixel art game, but fixes weird lines between tiles when upscaled
 Gosu::enable_undocumented_retrofication
 
-module GosuGameJam2
+module TheArcaneKing
   WIDTH = 1600
   HEIGHT = 900
   TILE_SIZE = 60
@@ -406,4 +406,4 @@ module GosuGameJam2
   end
 end
 
-GosuGameJam2::GameWindow.new.show
+TheArcaneKing::GameWindow.new.show

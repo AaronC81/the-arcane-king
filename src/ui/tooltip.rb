@@ -1,4 +1,4 @@
-module GosuGameJam2
+module TheArcaneKing
   # A mixin which enables an object to show a tooltip when hovered.
   #
   # The object must have the following methods:

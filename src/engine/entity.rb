@@ -3,7 +3,7 @@ require_relative 'animation'
 require_relative 'point'
 require_relative 'box'
 
-module GosuGameJam2 
+module TheArcaneKing 
   class Entity
     attr_accessor :position, :animations, :scaling, :mirror_x, :rotation, :opacity
 

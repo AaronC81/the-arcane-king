@@ -1,4 +1,4 @@
-module GosuGameJam2
+module TheArcaneKing
   module Res
     ROOT = File.join(__dir__, '..', 'res')
 

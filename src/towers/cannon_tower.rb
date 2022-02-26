@@ -1,6 +1,6 @@
 require_relative 'tower'
 
-module GosuGameJam2
+module TheArcaneKing
   class CannonTower < Tower
     EXPLOSION_RADIUS = 100
     EXPLOSION_COLOUR = Gosu::Color.argb(0xFF, 246, 165, 11)

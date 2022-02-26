@@ -1,4 +1,4 @@
-module GosuGameJam2
+module TheArcaneKing
   class Point
     attr_accessor :x, :y, :z
 

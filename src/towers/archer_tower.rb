@@ -1,6 +1,6 @@
 require_relative 'tower'
 
-module GosuGameJam2
+module TheArcaneKing
   class ArcherTower < Tower
     def initialize(owner:, **kw)
       super(

@@ -1,4 +1,4 @@
-module GosuGameJam2
+module TheArcaneKing
   class SlowField < Entity
     def initialize(**kw)
       super

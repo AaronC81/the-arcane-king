@@ -1,6 +1,6 @@
 require_relative 'unit'
 
-module GosuGameJam2
+module TheArcaneKing
   class GiantUnit < Unit
     def initialize(team)
       super(

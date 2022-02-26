@@ -1,6 +1,6 @@
 require_relative 'slow_field'
 
-module GosuGameJam2
+module TheArcaneKing
   class World
     SPAWNABLE_UNITS = [
       ScoutUnit, BruteUnit, CavalryUnit, GiantUnit, InvaderUnit, KnightUnit

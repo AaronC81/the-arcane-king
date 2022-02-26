@@ -1,7 +1,7 @@
 require_relative '../engine/entity'
 require_relative 'tooltip'
 
-module GosuGameJam2
+module TheArcaneKing
   class Button < Entity
     include Tooltip
 

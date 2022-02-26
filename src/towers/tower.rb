@@ -3,7 +3,7 @@ require_relative '../engine/animation'
 require_relative '../effects/projectile_trail'
 require_relative '../ui/tooltip'
 
-module GosuGameJam2
+module TheArcaneKing
   # A tower in a fixed position, which has some effect.
   class Tower < Entity
     def initialize(owner:, target_team:, cooldown:, **kw)

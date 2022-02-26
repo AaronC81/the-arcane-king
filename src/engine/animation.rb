@@ -1,4 +1,4 @@
-module GosuGameJam2
+module TheArcaneKing
   class Animation
     def initialize(images, ticks_per_image)
       @images = images

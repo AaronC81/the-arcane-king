@@ -1,4 +1,4 @@
-module GosuGameJam2
+module TheArcaneKing
   class Transition
     attr_reader :ongoing
     alias ongoing? ongoing

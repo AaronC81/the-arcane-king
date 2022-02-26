@@ -1,4 +1,4 @@
-module GosuGameJam2
+module TheArcaneKing
   Box = Struct.new('Box', :origin, :width, :height) do
     def overlaps?(other)
       self.origin.x < other.origin.x + other.width \

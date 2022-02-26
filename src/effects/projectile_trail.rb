@@ -1,6 +1,6 @@
 require_relative '../engine/entity'
 
-module GosuGameJam2
+module TheArcaneKing
   # A trail left by the effect of a tower. 
   class ProjectileTrail
     def initialize(from:, to:, colour:, opacity:, explosion: nil)

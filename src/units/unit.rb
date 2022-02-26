@@ -1,6 +1,6 @@
 require_relative '../engine/entity'
 
-module GosuGameJam2
+module TheArcaneKing
   # A unit which moves along a fixed path automatically.
   class Unit < Entity
     def initialize(max_health:, team:, speed:, reward:, **kw)
