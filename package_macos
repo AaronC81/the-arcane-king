@@ -30,3 +30,6 @@ cp -r res/* "$RESOURCES/res"
 # Create our own main
 rm "$RESOURCES/main.rb"
 echo "require_relative 'src/main.rb'" > "$RESOURCES/main.rb"
+
+# Ensure that the Ruby is marked as executable - this was causing problems when testing in a VM!
+chmod +x "$SCRIPT_DIR/build/macos/app/The Arcane King.app/Contents/MacOS/Ruby"
