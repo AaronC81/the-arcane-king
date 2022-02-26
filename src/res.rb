@@ -18,6 +18,7 @@ module GosuGameJam2
       @@loaded_songs ||= {}
       @@loaded_songs[name] ||= Gosu::Song.new(File.join(ROOT, *name))
       @@loaded_songs[name].volume = 0.15
+      @@loaded_songs[name].volume = 0 if ENV['NO_MUSIC']
       @@loaded_songs[name]
     end
   end
