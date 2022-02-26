@@ -1,8 +1,17 @@
+require_relative 'slow_field'
+
 module GosuGameJam2
   class World
     SPAWNABLE_UNITS = [
       ScoutUnit, BruteUnit, CavalryUnit, GiantUnit, InvaderUnit, KnightUnit
     ]
+
+    SPELL_RADII = {
+      smite: [210, Gosu::Color.rgb(252, 169, 3)],
+      stun: [210, Gosu::Color.rgb(246, 255, 0)],
+      slow: [120, Gosu::Color.rgb(255, 0, 157)],
+      bolt: [80, Gosu::Color.rgb(0, 17, 255)],
+    }
 
     def initialize
       @units = []
@@ -57,6 +66,9 @@ module GosuGameJam2
     
     # The player's charge of each magic spell.
     attr_accessor :magic_charges
+
+    # The spell which is currently being cast.
+    attr_accessor :casting_spell
 
     def wave_in_progress?
       remaining_enemies > 0
@@ -151,6 +163,49 @@ module GosuGameJam2
         time += rand([5 / [wave / 3, 1].max, 0].max..[30 / [wave / 3, 1].max, 5].max)
         [time, u]
       end
+    end
+
+    # Draw the cast radius for the spell currently being cast.
+    def draw_cast_radius
+      return unless casting_spell
+
+      radius, colour = SPELL_RADII[casting_spell]
+      Gosu.draw_circle($cursor.x, $cursor.y, radius, colour, 100, 3)
+    end
+
+    # Cast the current spell.
+    def cast
+      radius, colour = SPELL_RADII[casting_spell]
+
+      magic_charges[casting_spell] -= 1
+
+      case casting_spell
+      when :smite
+        targets = find_units(team: :enemy, radius: [$cursor, radius])
+        targets.each do |t|
+          t.damage(35)
+        end
+      
+      when :stun
+        targets = find_units(team: :enemy, radius: [$cursor, radius])
+        targets.each do |t|
+          t.speed_buffs[self] = [0, 120]
+        end
+
+      when :slow
+        $world.entities << SlowField.new(position: $cursor.clone)
+
+      when :bolt
+        targets = find_units(team: :enemy, radius: [$cursor, radius])
+        rand(1..3).times do
+          targets.sample.damage(99999)
+        end
+
+      else
+        raise 'unknown spell - huh!?'
+      end
+
+      self.casting_spell = nil
     end
   end
 end

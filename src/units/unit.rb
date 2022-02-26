@@ -31,7 +31,7 @@ module GosuGameJam2
     attr_accessor :health
 
     # Speed changes which are being applied to this unit. A hash of the tower applying the debuff
-    # to [change, multiplier]
+    # to [multiplier, duration]
     attr_accessor :speed_buffs
 
     # The gold reward for defeating this unit.

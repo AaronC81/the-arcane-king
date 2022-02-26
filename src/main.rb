@@ -108,12 +108,29 @@ module GosuGameJam2
       )
 
       # Set up magic buttons
+      magic_button_keys = ->(name) do
+        {
+          enabled: ->do 
+            if $world.wave_in_progress?
+              $world.magic_charges[name] > 0
+            else
+              $world.gold >= 25 && $world.magic_charges[name] < 5
+            end
+          end,
+          on_click: ->do
+            if $world.wave_in_progress?
+              $world.casting_spell = name
+            else
+              $world.gold -= 25 ; $world.magic_charges[name] += 1
+            end
+          end,
+        }
+      end
       @magic_buttons = [
         Button.new(
           position: Point.new(WIDTH - 290, 420),
           image: Res.image('magic/smite.png'),
-          enabled: ->{ $world.gold >= 25 && $world.magic_charges[:smite] < 5 },
-          on_click: ->{ $world.gold -= 25 ; $world.magic_charges[:smite] += 1 },
+          **magic_button_keys.(:smite),
           tooltip: <<~END
             SMITE enemies in an area,
             dealing damage to them.
@@ -124,8 +141,7 @@ module GosuGameJam2
         Button.new(
           position: Point.new(WIDTH - 155, 420),
           image: Res.image('magic/stun.png'),
-          enabled: ->{ $world.gold >= 25 && $world.magic_charges[:stun] < 5 },
-          on_click: ->{ $world.gold -= 25 ; $world.magic_charges[:stun] += 1 },
+          **magic_button_keys.(:stun),
           tooltip: <<~END
             STUN enemies in an area,
             briefly immobilising them.
@@ -136,11 +152,11 @@ module GosuGameJam2
         Button.new(
           position: Point.new(WIDTH - 290, 580),
           image: Res.image('magic/slow.png'),
-          enabled: ->{ $world.gold >= 25 && $world.magic_charges[:slow] < 5 },
-          on_click: ->{ $world.gold -= 25 ; $world.magic_charges[:slow] += 1 },
+          **magic_button_keys.(:slow),
           tooltip: <<~END
-            Cast a rift which SLOWS
-            enemies passing through it.
+            Cast a lasting rift which
+            SLOWS enemies passing
+            through it.
 
             Cost: 25 gold
           END
@@ -148,12 +164,11 @@ module GosuGameJam2
         Button.new(
           position: Point.new(WIDTH - 155, 580),
           image: Res.image('magic/bolt.png'),
-          enabled: ->{ $world.gold >= 25 && $world.magic_charges[:bolt] < 5 },
-          on_click: ->{ $world.gold -= 25 ; $world.magic_charges[:bolt] += 1 },
+          **magic_button_keys.(:bolt),
           tooltip: <<~END
-            Fire a BOLT which kills one
-            random enemy in the target
-            area.
+            Fire a BOLT which kills
+            one to three random enemies
+            in the target area.
 
             Cost: 25 gold
           END
@@ -187,6 +202,11 @@ module GosuGameJam2
         $world.placing_tower = nil
       end 
 
+      if $click && $world.casting_spell
+        $world.cast
+        $world.casting_spell = nil
+      end
+
       $click = false
 
       # If a wave just ended, increment wave number and stop music
@@ -194,6 +214,9 @@ module GosuGameJam2
         $world.wave += 1 
         Gosu::Song.current_song.stop
         Res.song('audio/build_music.wav').play(true)
+
+        # Also, if we were about to cast a spell, stop
+        $world.casting_spell = nil
       end
 
       @wave_in_progress_last_tick = $world.wave_in_progress?
@@ -214,21 +237,22 @@ module GosuGameJam2
       # Draw UI background
       Res.image('scroll.png').draw(WIDTH - 335, 25)
 
-      # Draw magic buttons
-      @magic_buttons.each(&:draw)
+      unless $world.placing_tower || $world.casting_spell
+        # Draw magic buttons
+        @magic_buttons.each(&:draw)
 
-      # Draw magic charges
-      [:smite, :stun, :slow, :bolt].zip(@magic_buttons).each do |magic, btn|
-        charges = $world.magic_charges[magic]
+        # Draw magic charges
+        [:smite, :stun, :slow, :bolt].zip(@magic_buttons).each do |magic, btn|
+          charges = $world.magic_charges[magic]
 
-        pt = btn.position + Point.new(43 - 8 * (charges - 1), 105)
-        charges.times do |i|
-          Res.image('magic/dot.png').draw(pt.x + i * 15, pt.y, 100)
+          pt = btn.position + Point.new(43 - 8 * (charges - 1), 105)
+          charges.times do |i|
+            Res.image('magic/dot.png').draw(pt.x + i * 15, pt.y, 100)
+          end
         end
       end
 
       # Draw path
-      # TODO: castle at the end
       last_direction = :east
       $world.trace_path(with_direction: true) do |s, e, dir|
         min_x = [s.x, e.x].min
@@ -303,7 +327,9 @@ module GosuGameJam2
         return
       end
 
+      # Draw things which are currently in progress
       $world.placing_tower&.draw_blueprint($cursor)
+      $world.draw_cast_radius
 
       # Draw health
       $regular_font.draw_text("Castle", 1300, 100, 100, 1, 1, THEME_BROWN)
@@ -332,6 +358,14 @@ module GosuGameJam2
         $regular_font.draw_text("Cancel building", 1390, 360, 100, 1, 1, THEME_BROWN)
       end
 
+      if $world.casting_spell
+        Res.image("left_click.png").draw(1350, 453)
+        $regular_font.draw_text("Cast", 1390, 460, 100, 1, 1, THEME_BROWN)
+
+        Res.image("right_click.png").draw(1350, 503)
+        $regular_font.draw_text("Cancel casting", 1390, 510, 100, 1, 1, THEME_BROWN)
+      end
+
       if $world.wave_in_progress?
         $regular_font.draw_text(
           "#{$world.remaining_enemies} enemies remaining\n\nHold SPACE to fast-forward",
@@ -352,6 +386,7 @@ module GosuGameJam2
         $click = true
       when Gosu::MsRight
         $world.placing_tower = nil
+        $world.casting_spell = nil
       when Gosu::KbF
         if $regular_font == $regular_font_medieval
           $regular_font = $regular_font_plain
