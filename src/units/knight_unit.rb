@@ -22,7 +22,13 @@ module GosuGameJam2
     end
 
     def self.spawn_cost
-      40
+      # The usual scaling system breaks down after around wave 20, so at that point we'll allow for
+      # a ludicrous amount of knights
+      if $world.wave >= 20
+        1
+      else
+        40
+      end
     end
   end
 end
