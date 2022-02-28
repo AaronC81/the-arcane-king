@@ -1,5 +1,14 @@
 module TheArcaneKing
-  Box = Struct.new('Box', :origin, :width, :height) do
+  class Box
+    def initialize(origin, width, height)
+      @origin = origin
+      @width = width
+      @height = height
+      $all_boxes << self if ENV['DEBUG_BOXES']
+    end 
+
+    attr_accessor :origin, :width, :height
+
     def overlaps?(other)
       self.origin.x < other.origin.x + other.width \
       && other.origin.x < self.origin.x + self.width \

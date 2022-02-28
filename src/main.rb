@@ -30,6 +30,8 @@ Gosu::enable_undocumented_retrofication
 $seen_menu = false
 $cursor = TheArcaneKing::Point.new(0, 0)
 
+$all_boxes = []
+
 module TheArcaneKing
   WIDTH = 1600
   HEIGHT = 900
@@ -406,6 +408,15 @@ module TheArcaneKing
           "#{$world.remaining_enemies} enemies remaining\n\nHold SPACE to fast-forward",
           1320, 300, 100, 1, 1, THEME_BROWN
         )
+      end
+
+      # Draw all boxes
+      if ENV['DEBUG_BOXES']
+        $all_boxes.each do |box|
+          Gosu.draw_outline_rect(box.origin.x, box.origin.y, box.width, box.height, Gosu::Color::FUCHSIA, 1)
+        end
+
+        $all_boxes = []
       end
     end
 
