@@ -155,7 +155,7 @@ module TheArcaneKing
         h = 10
       end
 
-      this_bounding_box = Box.new(Point.new(pos.x, pos.y), w, h)
+      this_bounding_box = Box.new(Point.new(pos.x - w / 2, pos.y - h / 2), w, h)
 
       # Check it's not overlapping any other towers
       $world.towers.each do |tower|
@@ -174,7 +174,7 @@ module TheArcaneKing
         # Draw a bounding box around each path segment
         # (+ w and + h offset for the funky bounding box of the tower)
         segment_box = Box.new(
-          Point.new(min_x - path_clearance + w / 2, min_y - path_clearance + h / 2),
+          Point.new(min_x - path_clearance, min_y - path_clearance),
           (max_x - min_x) + path_clearance * 2,
           (max_y - min_y) + path_clearance * 2,
         )
@@ -183,16 +183,13 @@ module TheArcaneKing
       end
 
       # Check it's not overlapping the right UI panel, or the castle
-      # 99% sure there's a mistake in how these boxes are calculated, because that's not actually
-      # where the UI starts, but I just trial-and-errored the coords and found the right ones. 
-      # It'll be fine!
       return false if this_bounding_box.overlaps?(Box.new(
-        Point.new(WIDTH - 295, 0), 
+        Point.new(WIDTH - 335, 0), 
         WIDTH, HEIGHT
       ))
       return false if this_bounding_box.overlaps?(Box.new(
-        Point.new(WIDTH - 530, 0), 
-        WIDTH, 300
+        Point.new(1038, 0), 
+        WIDTH, 250
       ))
 
       # All good!

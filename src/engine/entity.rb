@@ -51,7 +51,7 @@ module TheArcaneKing
     end
 
     def bounding_box
-      Box.new(position, image.width * scaling, image.height * scaling)
+      Box.new(position + Point.new(-image.width / 2, -image.height / 2), image.width * scaling, image.height * scaling)
     end
   end
 end
